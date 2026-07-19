@@ -242,6 +242,7 @@ Found 133 unique solution."
 		
 		int NofNx1x1Cuboid = getNumLayers(cuboidToBuild);
 
+		//TODO: will need to not use this as a reference!
 		Nx1x1CuboidToFold reference = new Nx1x1CuboidToFold(NofNx1x1Cuboid);
 
 		ArrayList<PivotCellDescription> startingPointsAndRotationsToCheck = PivotCellDescriptionForSimplePhase.getUniqueRotationListsWithCellInfo(cuboidToBuild);
