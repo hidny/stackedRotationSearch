@@ -36,7 +36,7 @@ public class CuboidToFoldOnExtendedRotSym  implements CuboidToFoldOnInterface {
 		
 		if(setup) {
 			setupAnswerSheetInBetweenLayers();
- 			setupAnswerSheetForTopCell();
+ 			setupAnswerSheetFor1x1Cell();
 		}
 		
 	}
@@ -174,8 +174,8 @@ public class CuboidToFoldOnExtendedRotSym  implements CuboidToFoldOnInterface {
 	private int newGroundedRotationAbove[][][];
 	
 	
-	private long answerSheetForTopCell[][][][];
-	private long answerSheetForTopCellAnySideBump[][][];
+	private long answerSheetFor1x1Cell[][][][];
+	private long answerSheetFor1x1CellAnySideBump[][][];
 
 	private long preComputedPossiblyEmptyCellsAroundNewLayer[][][][];
 	private boolean preComputedForceRegionSplitIfEmptyAroundNewLayer[][][];
@@ -270,10 +270,12 @@ public class CuboidToFoldOnExtendedRotSym  implements CuboidToFoldOnInterface {
 	
 	//TODO: deal with top/bottom cell later:
 	
-	/*//pre: The only cell left is top cell:
-	public boolean isTopCellAbleToBeAddedFast(int indexTrail) {
+	//pre: The only cell left is top cell:
+	public boolean is1x1CellAbleToBeAddedFast(int indexTrail) {
 		
-		long tmp[] = answerSheetForTopCellAnySideBump[topLeftGroundedIndex[indexTrail]][topLeftGroundRotationRelativeFlatMap[indexTrail]];
+		long tmp[] = answerSheetFor1x1CellAnySideBump
+				[this.prevGroundedIndexes[indexTrail][this.currentLayerIndex[indexTrail]]]
+				[this.prevGroundedRotations[indexTrail][this.currentLayerIndex[indexTrail]]];
 		
 		boolean ret = ((~curState[0] & tmp[0]) | (~curState[1] & tmp[1]) | (~curState[2] & tmp[2])) != 0;
 
@@ -282,12 +284,14 @@ public class CuboidToFoldOnExtendedRotSym  implements CuboidToFoldOnInterface {
 	}
 
 	//pre: The only cell left is top cell:
-	public boolean isTopCellAbleToBeAddedForSideBumpFast(int sideBump, int indexTrail) {
-		long tmp[] = answerSheetForTopCell[topLeftGroundedIndex[indexTrail]][topLeftGroundRotationRelativeFlatMap[indexTrail]][sideBump];
+	public boolean is1x1CellAbleToBeAddedForSideBumpFast(int sideBump, int indexTrail) {
+		long tmp[] = answerSheetFor1x1Cell
+				[this.prevGroundedIndexes[indexTrail][this.currentLayerIndex[indexTrail]]]
+				[this.prevGroundedRotations[indexTrail][this.currentLayerIndex[indexTrail]]]
+				[sideBump];
 		
 		return ((~curState[0] & tmp[0]) | (~curState[1] & tmp[1]) | (~curState[2] & tmp[2])) != 0;
 	}
-	*/
 	
 	private void setupAnswerSheetInBetweenLayers() {
 		
@@ -443,10 +447,10 @@ public class CuboidToFoldOnExtendedRotSym  implements CuboidToFoldOnInterface {
 	}
 	
 
-	public void setupAnswerSheetForTopCell() {
+	public void setupAnswerSheetFor1x1Cell() {
 		
-		answerSheetForTopCell = new long[Utils.getTotalArea(this.dimensions)][NUM_NEIGHBOURS][NUM_SIDE_BUMP_OPTIONS][NUM_LONGS_TO_USE];
-		answerSheetForTopCellAnySideBump = new long[Utils.getTotalArea(this.dimensions)][NUM_NEIGHBOURS][NUM_LONGS_TO_USE];
+		answerSheetFor1x1Cell = new long[Utils.getTotalArea(this.dimensions)][NUM_NEIGHBOURS][NUM_SIDE_BUMP_OPTIONS][NUM_LONGS_TO_USE];
+		answerSheetFor1x1CellAnySideBump = new long[Utils.getTotalArea(this.dimensions)][NUM_NEIGHBOURS][NUM_LONGS_TO_USE];
 		
 		for(int index=0; index<Utils.getTotalArea(this.dimensions); index++) {
 			for(int rotation=0; rotation<NUM_ROTATIONS; rotation++) {
@@ -477,15 +481,15 @@ public class CuboidToFoldOnExtendedRotSym  implements CuboidToFoldOnInterface {
 						tmpArray[cellAbove.i] = true;
 						tmpArrayForAnySideBump[cellAbove.i] = true;
 						
-						answerSheetForTopCell[index][rotation][sideBump] = convertBoolArrayToLongs(tmpArray);
+						answerSheetFor1x1Cell[index][rotation][sideBump] = convertBoolArrayToLongs(tmpArray);
 						//return ! this.cellsUsed[cellAbove.i];
 			
 					} else {
-						answerSheetForTopCell[index][rotation][sideBump] = setImpossibleForTopAnswerSheet();
+						answerSheetFor1x1Cell[index][rotation][sideBump] = setImpossibleForTopAnswerSheet();
 					}
 				}
 				
-				answerSheetForTopCellAnySideBump[index][rotation] = convertBoolArrayToLongs(tmpArrayForAnySideBump);
+				answerSheetFor1x1CellAnySideBump[index][rotation] = convertBoolArrayToLongs(tmpArrayForAnySideBump);
 			}
 		}
 		
