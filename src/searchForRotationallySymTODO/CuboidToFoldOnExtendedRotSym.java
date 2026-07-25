@@ -55,64 +55,45 @@ public class CuboidToFoldOnExtendedRotSym  implements CuboidToFoldOnInterface {
 		return dimensions;
 	}
 	
-	private static int initialSepIfEvenLayers = -1;
+	private int initialSepIfEvenLayers = -1;
 	public static int NOT_APPLICABLE = -100;
 
-	//TODO: Assuming it's a Nx1x1 cuboid:
+	
 	private static boolean isEvenNumberOfLayers(int area, int dimensions[]) {
-		int numOnes = 0;
-		for(int i=0; i<dimensions.length; i++) {
-			if(dimensions[i] == 1) {
-				numOnes++;
-			}
-			
-		}
-		if(numOnes <2) {
-			System.out.println("Assumption failed in isEvenNumber!");
-			System.exit(1);
-		}
+		
+		//Nx1x1 version of the cuboid will be even iff area is 2 mod 8:
 		return (area - 2) % 8 == 0;
 	}
 	
-	public void initializeNewBottomIndexAndRotation(int bottomIndex, int bottomRotationRelativeFlatMap, int initialSepIfEvenLayers) {
+	public static final int DUD_INTT = -1;
+	private boolean isDudInit() {
+		return this.currentLayerIndex[0] == DUD_INTT;
+	}
+	
+	public void initializeNewBottomIndexAndRotation(int startIndex, int startRotationRelativeFlatMap, int initialSepIfEvenLayers) {
 		
-		
-		this.topLeftGroundedIndex[0] = bottomIndex;
-		this.topLeftGroundRotationRelativeFlatMap[0] = bottomRotationRelativeFlatMap;
-		
-		Coord2D origInit = new Coord2D(bottomIndex, bottomRotationRelativeFlatMap);
-		
-		Coord2D flipedInit = TopAndBottomTransitionList2.topLeftIndexRotAfter180Flip1x4layer(neighbours, bottomIndex, bottomRotationRelativeFlatMap);
-
-		this.topLeftGroundedIndex[1] = flipedInit.i;
-		this.topLeftGroundRotationRelativeFlatMap[1] = flipedInit.j;
-		
-		if(isEvenNumberOfLayers(getNumCellsToFill(), dimensions)) {
-			//EVEN # layers
-			this.initialSepIfEvenLayers = initialSepIfEvenLayers;
-			
-		} else {
-			//ODD # layers
-			this.initialSepIfEvenLayers = NOT_APPLICABLE;
-			
-		}
-		
-		//topLeftIndexRotAfter180Flip1x4layer(CoordWithRotationAndIndex neighbours[][], int index, int rotation)
-
-		prevSideBumps = new int[2][DIM_N_OF_Nx1x1_DIV_2];
 		prevGroundedIndexes = new int[2][DIM_N_OF_Nx1x1_DIV_2];
 		prevGroundedRotations = new int[2][DIM_N_OF_Nx1x1_DIV_2];
+		prevSideBumps = new int[2][DIM_N_OF_Nx1x1_DIV_2];
+		
+		this.prevGroundedIndexes[0][0] = startIndex;
+		this.prevGroundedRotations[0][0] = startRotationRelativeFlatMap;
+		
+		Coord2D origInit = new Coord2D(startIndex, startRotationRelativeFlatMap);
+		
+		Coord2D flipedInit = TopAndBottomTransitionList2.topLeftIndexRotAfter180Flip1x4layer(neighbours, startIndex, startRotationRelativeFlatMap);
+
+		this.prevGroundedIndexes[1][0] = flipedInit.i;
+		this.prevGroundedRotations[1][0] = flipedInit.j;
+		
+		this.currentLayerIndex = new int[2];
+		this.currentLayerIndex[0] = 0;
+		this.currentLayerIndex[1] = 0;
 		
 		currentLayerIndex = new int[2];
 		currentLayerIndex[0] = 0;
 		currentLayerIndex[1] = 0;
 
-		if(DIM_N_OF_Nx1x1_DIV_2 > 0) {
-			//Initialize so the debug print doesn't fail:
-			prevGroundedIndexes[0][0] = this.topLeftGroundedIndex[0];
-			prevGroundedIndexes[1][0] = this.topLeftGroundedIndex[1];
-		}
-		
 		//TODO: wrong; (cover 4 of them!)
 		boolean tmpArray[] = new boolean[Utils.getTotalArea(this.dimensions)];
 		
@@ -125,8 +106,29 @@ public class CuboidToFoldOnExtendedRotSym  implements CuboidToFoldOnInterface {
 			tmpArray[currentCellLocation.i] = true;
 			currentCellLocation = tryAttachCellInDir(currentCellLocation.i, currentCellLocation.j, RIGHT);
 		}
+
+		this.curState = convertBoolArrayToLongs(tmpArray);
+		
+		
+		//Add first flipped layer if even # of layers:
 		
 		if(isEvenNumberOfLayers(getNumCellsToFill(), dimensions)) {
+			//EVEN # layers
+			this.initialSepIfEvenLayers = initialSepIfEvenLayers;
+			
+			if(this.isNewLayerValidSimpleFast(this.initialSepIfEvenLayers, 1)) {
+				this.addNewLayerFast(this.initialSepIfEvenLayers, 1);
+			
+			} else {
+				//TODO: comment out once tested:
+				System.out.println("Warning: can't add 1st mirror layer");
+				this.currentLayerIndex[0] = DUD_INTT;
+				this.currentLayerIndex[1] = DUD_INTT;
+				return;
+			}
+			
+			flipedInit = new Coord2D(this.prevGroundedIndexes[1][1], this.prevGroundedRotations[1][1]);
+			
 			currentCellLocation = flipedInit;
 			for(int i=0; i<4; i++) {
 				if(tmpArray[currentCellLocation.i]) {
@@ -135,9 +137,14 @@ public class CuboidToFoldOnExtendedRotSym  implements CuboidToFoldOnInterface {
 				tmpArray[currentCellLocation.i] = true;
 				currentCellLocation = tryAttachCellInDir(currentCellLocation.i, currentCellLocation.j, RIGHT);
 			}
+			
+		} else {
+			//ODD # layers
+			this.initialSepIfEvenLayers = NOT_APPLICABLE;
+			
 		}
 		
-		this.curState = convertBoolArrayToLongs(tmpArray);
+		
 	}
 
 
@@ -176,9 +183,6 @@ public class CuboidToFoldOnExtendedRotSym  implements CuboidToFoldOnInterface {
 
 	//State variables:
 	public long curState[] = new long[NUM_LONGS_TO_USE];
-
-	private int topLeftGroundedIndex[] = new int[2];
-	private int topLeftGroundRotationRelativeFlatMap[] = new int[2];
 	
 	private int prevSideBumps[][];
 	private int prevGroundedIndexes[][];
@@ -202,48 +206,71 @@ public class CuboidToFoldOnExtendedRotSym  implements CuboidToFoldOnInterface {
 	
 	public boolean isNewLayerValidSimpleFast(int sideBump, int indexTrail) {
 	
-		long tmp[] = answerSheet[topLeftGroundedIndex[indexTrail]][topLeftGroundRotationRelativeFlatMap[indexTrail]][sideBump];
+		System.out.println("Side Bump test: " + sideBump);
+		long tmp[] = answerSheet
+				[this.prevGroundedIndexes[indexTrail][this.currentLayerIndex[indexTrail]]]
+				[this.prevGroundedRotations[indexTrail][this.currentLayerIndex[indexTrail]]]
+				[sideBump];
+
+		System.out.println("Test valid:");
+		System.out.println(tmp[0]);
+		System.out.println(tmp[1]);
+		System.out.println(tmp[2]);
+		
+		System.out.println("curState:");
+		System.out.println(curState[0]);
+		System.out.println(curState[1]);
+		System.out.println(curState[2]);
 	
 		return ((curState[0] & tmp[0]) | (curState[1] & tmp[1]) | (curState[2] & tmp[2])) == 0L /*&& ! unoccupiedRegionSplit(tmp, sideBump)*/;
 		
 	}
 	
 	public void addNewLayerFast(int sideBump, int indexTrail) {
-		long tmp[] = answerSheet[topLeftGroundedIndex[indexTrail]][topLeftGroundRotationRelativeFlatMap[indexTrail]][sideBump];
+		
+		long tmp[] = answerSheet
+				[this.prevGroundedIndexes[indexTrail][this.currentLayerIndex[indexTrail]]]
+				[this.prevGroundedRotations[indexTrail][this.currentLayerIndex[indexTrail]]]
+				[sideBump];
 		curState[0] = curState[0] | tmp[0];
 		curState[1] = curState[1] | tmp[1];
 		curState[2] = curState[2] | tmp[2];
 		
-		int tmp1 = newGroundedIndexAbove[this.topLeftGroundedIndex[indexTrail]][this.topLeftGroundRotationRelativeFlatMap[indexTrail]][sideBump];
-		int tmp2 = newGroundedRotationAbove[this.topLeftGroundedIndex[indexTrail]][this.topLeftGroundRotationRelativeFlatMap[indexTrail]][sideBump];
+		this.prevGroundedIndexes[indexTrail][this.currentLayerIndex[indexTrail] + 1]
+				= newGroundedIndexAbove
+				[this.prevGroundedIndexes[indexTrail][this.currentLayerIndex[indexTrail]]]
+				[this.prevGroundedRotations[indexTrail][this.currentLayerIndex[indexTrail]]]
+				[sideBump];
+		this.prevGroundedRotations[indexTrail][this.currentLayerIndex[indexTrail] + 1] 
+				= newGroundedRotationAbove
+				[this.prevGroundedIndexes[indexTrail][this.currentLayerIndex[indexTrail]]]
+				[this.prevGroundedRotations[indexTrail][this.currentLayerIndex[indexTrail]]]
+				[sideBump];
+	
+		this.prevSideBumps[indexTrail][currentLayerIndex[indexTrail]] = sideBump;
 		
-		prevGroundedIndexes[indexTrail][currentLayerIndex[indexTrail]] = this.topLeftGroundedIndex[indexTrail];
-		prevGroundedRotations[indexTrail][currentLayerIndex[indexTrail]] = this.topLeftGroundRotationRelativeFlatMap[indexTrail];
-		prevSideBumps[indexTrail][currentLayerIndex[indexTrail]] = sideBump;
-		currentLayerIndex[indexTrail]++;
-		
-		this.topLeftGroundedIndex[indexTrail] = tmp1;
-		this.topLeftGroundRotationRelativeFlatMap[indexTrail] = tmp2;
-		
-		
-		
+		this.currentLayerIndex[indexTrail]++;
 	}
 	
 	public void removePrevLayerFast(int indexTrail) {
 		
 		currentLayerIndex[indexTrail]--;
-		this.topLeftGroundedIndex[indexTrail] = prevGroundedIndexes[indexTrail][currentLayerIndex[indexTrail]]; 
-		this.topLeftGroundRotationRelativeFlatMap[indexTrail] = prevGroundedRotations[indexTrail][currentLayerIndex[indexTrail]];
 		int sideBumpToCancel  = prevSideBumps[indexTrail][currentLayerIndex[indexTrail]];
 		
 		
-		long tmp[] = answerSheet[topLeftGroundedIndex[indexTrail]][topLeftGroundRotationRelativeFlatMap[indexTrail]][sideBumpToCancel];
+		long tmp[] = answerSheet
+				[this.prevGroundedIndexes[indexTrail][this.currentLayerIndex[indexTrail]]]
+				[this.prevGroundedRotations[indexTrail][this.currentLayerIndex[indexTrail]]]
+				[sideBumpToCancel];
+				
 		curState[0] = curState[0] ^ tmp[0];
 		curState[1] = curState[1] ^ tmp[1];
 		curState[2] = curState[2] ^ tmp[2];
 	}
 	
-	//pre: The only cell left is top cell:
+	//TODO: deal with top/bottom cell later:
+	
+	/*//pre: The only cell left is top cell:
 	public boolean isTopCellAbleToBeAddedFast(int indexTrail) {
 		
 		long tmp[] = answerSheetForTopCellAnySideBump[topLeftGroundedIndex[indexTrail]][topLeftGroundRotationRelativeFlatMap[indexTrail]];
@@ -260,7 +287,7 @@ public class CuboidToFoldOnExtendedRotSym  implements CuboidToFoldOnInterface {
 		
 		return ((~curState[0] & tmp[0]) | (~curState[1] & tmp[1]) | (~curState[2] & tmp[2])) != 0;
 	}
-	
+	*/
 	
 	private void setupAnswerSheetInBetweenLayers() {
 		
@@ -526,6 +553,8 @@ public class CuboidToFoldOnExtendedRotSym  implements CuboidToFoldOnInterface {
 	}
 
 	
+
+	
 	//TODO: this needs to be fixed!
 	//DEBUG PRINT STATE ON OTHER CUBOID:
 	public void printCurrentStateOnOtherCuboidsFlatMap() {
@@ -535,12 +564,13 @@ public class CuboidToFoldOnExtendedRotSym  implements CuboidToFoldOnInterface {
 				this.dimensions[1],
 				this.dimensions[2],
 				false,
-				false
+				true//Use the answer sheet...
 				);
 		
 		toPrint.initializeNewBottomIndexAndRotation(
-				this.prevGroundedIndexes[0],
-				this.prevGroundedRotations[0]
+				this.prevGroundedIndexes[0][0],
+				this.prevGroundedRotations[0][0],
+				this.initialSepIfEvenLayers
 				);
 		
 		String labels[] = new String[Utils.getTotalArea(toPrint.dimensions)];
@@ -549,10 +579,42 @@ public class CuboidToFoldOnExtendedRotSym  implements CuboidToFoldOnInterface {
 			labels[i] = null;
 		}
 		
-		//Set the bottom index:
-		labels[this.prevGroundedIndexes[0]] = "Bo";
+		//TODO: bottom index...
+		//Set the start index:
+		String labelToUseStart = "AA";
+		labels[this.prevGroundedIndexes[0][0]] = labelToUseStart;
 		
+		//TODO: copy paste code
+		Coord2D curStart = new Coord2D(this.prevGroundedIndexes[0][0], this.prevGroundedRotations[0][0]);
 		
+		for(int j=0; j<4 - 1; j++) {
+			curStart = this.tryAttachCellInDir(curStart.i, curStart.j, RIGHT);
+			labels[curStart.i] = labelToUseStart;
+			
+		}
+		//END TODO: copy paste code
+
+		//TODO: flip
+		if(this.initialSepIfEvenLayers != NOT_APPLICABLE) {
+			labelToUseStart = "aa";
+			labels[this.prevGroundedIndexes[1][1]] = labelToUseStart;
+
+			//TODO: copy paste code
+			curStart = new Coord2D(this.prevGroundedIndexes[1][1], this.prevGroundedRotations[1][1]);
+			
+			for(int j=0; j<4 - 1; j++) {
+				curStart = this.tryAttachCellInDir(curStart.i, curStart.j, RIGHT);
+				labels[curStart.i] = labelToUseStart;
+				
+			}
+			//END TODO: copy paste code
+			
+		}
+		
+		//TODO: print more layers later!
+		//So far AAAA and aaaa.... want BBBB and CCCC...
+		
+		/*
 		//Set the grounded Mid indexes (do more later)
 		for(int i=0; i<this.currentLayerIndex; i++) {
 			
@@ -602,6 +664,7 @@ public class CuboidToFoldOnExtendedRotSym  implements CuboidToFoldOnInterface {
 		if(numNullLabels == 1) {
 			labels[curTopIndex] = "To";
 		}
+		*/
 
 		System.out.println(DataModelViews.getFlatNumberingView(this.dimensions[0],
 				this.dimensions[1],
@@ -613,4 +676,17 @@ public class CuboidToFoldOnExtendedRotSym  implements CuboidToFoldOnInterface {
 
 	//END DEBUG PRINT STATE ON OTHER CUBOID:
 
+	public static void main(String args[]) {
+		//CuboidToFoldOnExtendedRotSym test1 = new CuboidToFoldOnExtendedRotSym(5, 2, 1);
+		CuboidToFoldOnExtendedRotSym test1 = new CuboidToFoldOnExtendedRotSym(5, 3, 1);
+		
+		test1.initializeNewBottomIndexAndRotation(25, 0, 9);
+		
+		if( ! test1.isDudInit()) {
+			test1.printCurrentStateOnOtherCuboidsFlatMap();
+		} else {
+			System.out.println("Dud!");
+		}
+		System.out.println("Done!");
+	}
 }
