@@ -59,7 +59,7 @@ public class CuboidToFoldOnExtendedRotSym  implements CuboidToFoldOnInterface {
 	public static int NOT_APPLICABLE = -100;
 
 	
-	private static boolean isEvenNumberOfLayers(int area, int dimensions[]) {
+	private static boolean isEvenNumberOfLayers(int area) {
 		
 		//Nx1x1 version of the cuboid will be even iff area is 2 mod 8:
 		return (area - 2) % 8 == 0;
@@ -112,7 +112,7 @@ public class CuboidToFoldOnExtendedRotSym  implements CuboidToFoldOnInterface {
 		
 		//Add first flipped layer if even # of layers:
 		
-		if(isEvenNumberOfLayers(getNumCellsToFill(), dimensions)) {
+		if(this.isEvenNumberOfLayers(this.getNumCellsToFill())) {
 			//EVEN # layers
 			this.initialSepIfEvenLayers = initialSepIfEvenLayers;
 			
@@ -581,35 +581,68 @@ public class CuboidToFoldOnExtendedRotSym  implements CuboidToFoldOnInterface {
 		
 		//TODO: bottom index...
 		//Set the start index:
-		String labelToUseStart = "AA";
-		labels[this.prevGroundedIndexes[0][0]] = labelToUseStart;
 		
-		//TODO: copy paste code
-		Coord2D curStart = new Coord2D(this.prevGroundedIndexes[0][0], this.prevGroundedRotations[0][0]);
-		
-		for(int j=0; j<4 - 1; j++) {
-			curStart = this.tryAttachCellInDir(curStart.i, curStart.j, RIGHT);
-			labels[curStart.i] = labelToUseStart;
+		for(int i=0; i<this.currentLayerIndex[0] + 1 ; i++) {
+			//TODO: accomedate i > 26 eventually...
+			char charToUse = (char)('A' + i%26);
 			
-		}
-		//END TODO: copy paste code
+			int num = i /26;
+			String labelToUse = "";
+			if(num > 0) {
 
-		//TODO: flip
-		if(this.initialSepIfEvenLayers != NOT_APPLICABLE) {
-			labelToUseStart = "aa";
-			labels[this.prevGroundedIndexes[1][1]] = labelToUseStart;
-
+				labelToUse = charToUse + "" + (num-1);
+			} else {
+				labelToUse = charToUse + "" + charToUse;
+			}
+			
+			labels[this.prevGroundedIndexes[0][i]] = labelToUse;
+			
 			//TODO: copy paste code
-			curStart = new Coord2D(this.prevGroundedIndexes[1][1], this.prevGroundedRotations[1][1]);
+			Coord2D curStart = new Coord2D(this.prevGroundedIndexes[0][i], this.prevGroundedRotations[0][i]);
 			
 			for(int j=0; j<4 - 1; j++) {
 				curStart = this.tryAttachCellInDir(curStart.i, curStart.j, RIGHT);
-				labels[curStart.i] = labelToUseStart;
+				labels[curStart.i] = labelToUse;
 				
 			}
 			//END TODO: copy paste code
-			
 		}
+			
+		
+		for(int i=1; i<this.currentLayerIndex[1] + 1; i++) {
+			//TODO: accomedate i > 26 eventually...
+			
+			int adjustLabelStart = 0; 
+			
+			if(this.isEvenNumberOfLayers(this.getNumCellsToFill())) {
+				adjustLabelStart = 1;
+			}
+			
+			char charToUse = (char)('a' + i%26 - adjustLabelStart);
+			
+			int num = i /26;
+			String labelToUse = "";
+			if(num > 0) {
+
+				labelToUse = charToUse + "" + (num-1);
+			} else {
+				labelToUse = charToUse + "" + charToUse;
+			}
+			
+			labels[this.prevGroundedIndexes[1][i]] = labelToUse;
+			
+			//TODO: copy paste code
+			Coord2D curStart = new Coord2D(this.prevGroundedIndexes[1][i], this.prevGroundedRotations[1][i]);
+			
+			for(int j=0; j<4 - 1; j++) {
+				curStart = this.tryAttachCellInDir(curStart.i, curStart.j, RIGHT);
+				labels[curStart.i] = labelToUse;
+				
+			}
+			//END TODO: copy paste code
+		}
+			
+		
 		
 		//TODO: print more layers later!
 		//So far AAAA and aaaa.... want BBBB and CCCC...
@@ -682,11 +715,18 @@ public class CuboidToFoldOnExtendedRotSym  implements CuboidToFoldOnInterface {
 		
 		test1.initializeNewBottomIndexAndRotation(25, 0, 9);
 		
-		if( ! test1.isDudInit()) {
-			test1.printCurrentStateOnOtherCuboidsFlatMap();
-		} else {
+		if( test1.isDudInit()) {
 			System.out.println("Dud!");
+			return;
 		}
+
+		//test1.printCurrentStateOnOtherCuboidsFlatMap();
+		
+		test1.addNewLayerFast(7, 0);
+		
+		test1.addNewLayerFast(7, 1);
+		test1.printCurrentStateOnOtherCuboidsFlatMap();
+		
 		System.out.println("Done!");
 	}
 }
