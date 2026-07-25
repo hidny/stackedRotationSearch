@@ -582,107 +582,56 @@ public class CuboidToFoldOnExtendedRotSym  implements CuboidToFoldOnInterface {
 		//TODO: bottom index...
 		//Set the start index:
 		
-		for(int i=0; i<this.currentLayerIndex[0] + 1 ; i++) {
-			//TODO: accomedate i > 26 eventually...
-			char charToUse = (char)('A' + i%26);
-			
-			int num = i /26;
-			String labelToUse = "";
-			if(num > 0) {
-
-				labelToUse = charToUse + "" + (num-1);
-			} else {
-				labelToUse = charToUse + "" + charToUse;
-			}
-			
-			labels[this.prevGroundedIndexes[0][i]] = labelToUse;
-			
-			//TODO: copy paste code
-			Coord2D curStart = new Coord2D(this.prevGroundedIndexes[0][i], this.prevGroundedRotations[0][i]);
-			
-			for(int j=0; j<4 - 1; j++) {
-				curStart = this.tryAttachCellInDir(curStart.i, curStart.j, RIGHT);
-				labels[curStart.i] = labelToUse;
+		for(int indexTrail=0; indexTrail<2; indexTrail++) {
+			for(int i=0; i<this.currentLayerIndex[indexTrail] + 1 ; i++) {
+				//TODO: accomedate i > 26 eventually...
 				
-			}
-			//END TODO: copy paste code
-		}
-			
-		
-		for(int i=1; i<this.currentLayerIndex[1] + 1; i++) {
-			//TODO: accomedate i > 26 eventually...
-			
-			int adjustLabelStart = 0; 
-			
-			if(this.isEvenNumberOfLayers(this.getNumCellsToFill())) {
-				adjustLabelStart = 1;
-			}
-			
-			char charToUse = (char)('a' + i%26 - adjustLabelStart);
-			
-			int num = i /26;
-			String labelToUse = "";
-			if(num > 0) {
-
-				labelToUse = charToUse + "" + (num-1);
-			} else {
-				labelToUse = charToUse + "" + charToUse;
-			}
-			
-			labels[this.prevGroundedIndexes[1][i]] = labelToUse;
-			
-			//TODO: copy paste code
-			Coord2D curStart = new Coord2D(this.prevGroundedIndexes[1][i], this.prevGroundedRotations[1][i]);
-			
-			for(int j=0; j<4 - 1; j++) {
-				curStart = this.tryAttachCellInDir(curStart.i, curStart.j, RIGHT);
-				labels[curStart.i] = labelToUse;
+				int adjustLabelStart = 0; 
 				
-			}
-			//END TODO: copy paste code
-		}
-			
-		
-		
-		//TODO: print more layers later!
-		//So far AAAA and aaaa.... want BBBB and CCCC...
-		
-		/*
-		//Set the grounded Mid indexes (do more later)
-		for(int i=0; i<this.currentLayerIndex; i++) {
-			
-			char label = (char)( (i) + 'A');
-			
-
-			String labelToUse = label + "" + label;
-			
-			
-			if(i < this.currentLayerIndex - 1) {
-				labels[this.prevGroundedIndexes[i + 1]] = labelToUse;
+				if(indexTrail == 1 && i == 0) {
+					//For better or worse, the first layer of the fliped trail is the first layer of the normal trail,
+					//so don't label it:
+					continue;
+				} else if(indexTrail == 1 && isEvenNumberOfLayers(this.getNumCellsToFill())) {
+					//If there's an even number of layers, then the 2nd layer on the flipped trail should be labeled 'a'
+					adjustLabelStart = 1;
+				}
 				
-
-				Coord2D cur = new Coord2D(this.prevGroundedIndexes[i + 1], this.prevGroundedRotations[i + 1]);
+				char charToUse;
+				if(indexTrail == 1) {
+					charToUse = (char)('a' + i%26 - adjustLabelStart);
+				} else {
+					charToUse = (char)('A' + i%26);
+				}
+				
+				
+				int num = i /26;
+				String labelToUse = "";
+				if(num > 0) {
+	
+					labelToUse = charToUse + "" + (num-1);
+				} else {
+					labelToUse = charToUse + "" + charToUse;
+				}
+				
+				labels[this.prevGroundedIndexes[indexTrail][i]] = labelToUse;
+				
+				//TODO: copy paste code
+				Coord2D curStart = new Coord2D(this.prevGroundedIndexes[indexTrail][i], this.prevGroundedRotations[indexTrail][i]);
 				
 				for(int j=0; j<4 - 1; j++) {
-					cur = this.tryAttachCellInDir(cur.i, cur.j, RIGHT);
-					labels[cur.i] = labelToUse;
+					curStart = this.tryAttachCellInDir(curStart.i, curStart.j, RIGHT);
+					labels[curStart.i] = labelToUse;
 					
 				}
-				
-			} else {
-				
-				labels[this.topLeftGroundedIndex] = labelToUse;
-				
-
-				Coord2D cur = new Coord2D(this.topLeftGroundedIndex, this.topLeftGroundRotationRelativeFlatMap);
-				
-				for(int j=0; j<4 - 1; j++) {
-					cur = this.tryAttachCellInDir(cur.i, cur.j, RIGHT);
-					labels[cur.i] = labelToUse;
-				}
+				//END TODO: copy paste code
 			}
-			
 		}
+			
+		
+		
+		//TODO:
+		/*
 		
 		int numNullLabels = 0;
 		int curTopIndex = -1;
@@ -710,8 +659,8 @@ public class CuboidToFoldOnExtendedRotSym  implements CuboidToFoldOnInterface {
 	//END DEBUG PRINT STATE ON OTHER CUBOID:
 
 	public static void main(String args[]) {
-		//CuboidToFoldOnExtendedRotSym test1 = new CuboidToFoldOnExtendedRotSym(5, 2, 1);
-		CuboidToFoldOnExtendedRotSym test1 = new CuboidToFoldOnExtendedRotSym(5, 3, 1);
+		CuboidToFoldOnExtendedRotSym test1 = new CuboidToFoldOnExtendedRotSym(5, 2, 1);
+		//CuboidToFoldOnExtendedRotSym test1 = new CuboidToFoldOnExtendedRotSym(5, 3, 1);
 		
 		test1.initializeNewBottomIndexAndRotation(25, 0, 9);
 		
@@ -724,6 +673,11 @@ public class CuboidToFoldOnExtendedRotSym  implements CuboidToFoldOnInterface {
 		
 		test1.addNewLayerFast(7, 0);
 		
+		test1.addNewLayerFast(7, 1);
+		
+		test1.printCurrentStateOnOtherCuboidsFlatMap();
+		
+		test1.removePrevLayerFast(1);
 		test1.addNewLayerFast(7, 1);
 		test1.printCurrentStateOnOtherCuboidsFlatMap();
 		
