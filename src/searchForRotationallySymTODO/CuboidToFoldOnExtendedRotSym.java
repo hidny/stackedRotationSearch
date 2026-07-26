@@ -751,7 +751,17 @@ public class CuboidToFoldOnExtendedRotSym  implements CuboidToFoldOnInterface {
 		//WRONG, but it's a start:
 		for(int i=this.currentLayerIndex[1] - 1; i>=0; i--) {
 
-			reference.addNextLevel(new Coord2D(0, this.prevSideBumps[1][i]));
+			if(i+1 == this.layerIndexOf1x1Cell[1]) {
+				
+				//6 - > 3, 7->4, 8 - >5,9->4 
+				int bumpToUse = this.prevSideBumps[1][i] - 3;
+				
+				
+				reference.addNextLevel(new Coord2D(0, bumpToUse));
+				
+			} else {
+				reference.addNextLevel(new Coord2D(0, this.prevSideBumps[1][i]));
+			}
 			//if(this.currentLayerIndex[1])
 		}
 		for(int i=0; i<this.currentLayerIndex[0]; i++) {
