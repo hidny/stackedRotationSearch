@@ -90,6 +90,10 @@ public class CuboidToFoldOnExtendedRotSym  implements CuboidToFoldOnInterface {
 		this.currentLayerIndex[0] = 0;
 		this.currentLayerIndex[1] = 0;
 		
+		this.layerIndexOf1x1Cell = new int[2];
+		this.layerIndexOf1x1Cell[0] = -1;
+		this.layerIndexOf1x1Cell[1] = -1;
+		
 		currentLayerIndex = new int[2];
 		currentLayerIndex[0] = 0;
 		currentLayerIndex[1] = 0;
@@ -188,6 +192,7 @@ public class CuboidToFoldOnExtendedRotSym  implements CuboidToFoldOnInterface {
 	private int prevGroundedIndexes[][];
 	private int prevGroundedRotations[][];
 	private int currentLayerIndex[];
+	private int layerIndexOf1x1Cell[];
 	
 	private long debugThru = 0L;
 	private long debugStop = 0L;
@@ -266,6 +271,62 @@ public class CuboidToFoldOnExtendedRotSym  implements CuboidToFoldOnInterface {
 		curState[0] = curState[0] ^ tmp[0];
 		curState[1] = curState[1] ^ tmp[1];
 		curState[2] = curState[2] ^ tmp[2];
+	}
+	
+	
+	public void addNew1x1CellFast(int sideBump, int indexTrail) {
+
+		//TODO: actually change state for this?
+		// Meh!
+		/*
+		long tmp[] = answerSheet
+				[this.prevGroundedIndexes[indexTrail][this.currentLayerIndex[indexTrail]]]
+				[this.prevGroundedRotations[indexTrail][this.currentLayerIndex[indexTrail]]]
+				[sideBump];
+		curState[0] = curState[0] | tmp[0];
+		curState[1] = curState[1] | tmp[1];
+		curState[2] = curState[2] | tmp[2];
+		*/
+		
+		this.prevGroundedIndexes[indexTrail][this.currentLayerIndex[indexTrail] + 1]
+				= newGroundedIndexAbove
+				[this.prevGroundedIndexes[indexTrail][this.currentLayerIndex[indexTrail]]]
+				[this.prevGroundedRotations[indexTrail][this.currentLayerIndex[indexTrail]]]
+				[sideBump];
+		/*
+		this.prevGroundedRotations[indexTrail][this.currentLayerIndex[indexTrail] + 1] 
+				= newGroundedRotationAbove
+				[this.prevGroundedIndexes[indexTrail][this.currentLayerIndex[indexTrail]]]
+				[this.prevGroundedRotations[indexTrail][this.currentLayerIndex[indexTrail]]]
+				[sideBump];
+	
+		*/
+		this.prevSideBumps[indexTrail][currentLayerIndex[indexTrail]] = sideBump;
+		
+		layerIndexOf1x1Cell[indexTrail] = this.currentLayerIndex[indexTrail] + 1;
+
+		this.currentLayerIndex[indexTrail]++;
+	}
+	
+	public void removePrev1x1CellFast(int indexTrail) {
+		
+		currentLayerIndex[indexTrail]--;
+		layerIndexOf1x1Cell[indexTrail] = -1;
+		
+		//TODO: actually change state for this?
+		// Meh!
+		/*
+		int sideBumpToCancel  = prevSideBumps[indexTrail][currentLayerIndex[indexTrail]];
+		
+		long tmp[] = answerSheet
+				[this.prevGroundedIndexes[indexTrail][this.currentLayerIndex[indexTrail]]]
+				[this.prevGroundedRotations[indexTrail][this.currentLayerIndex[indexTrail]]]
+				[sideBumpToCancel];
+				
+		curState[0] = curState[0] ^ tmp[0];
+		curState[1] = curState[1] ^ tmp[1];
+		curState[2] = curState[2] ^ tmp[2];
+		*/
 	}
 	
 	//TODO: deal with top/bottom cell later:
@@ -620,15 +681,25 @@ public class CuboidToFoldOnExtendedRotSym  implements CuboidToFoldOnInterface {
 				
 				labels[this.prevGroundedIndexes[indexTrail][i]] = labelToUse;
 				
-				//TODO: copy paste code
-				Coord2D curStart = new Coord2D(this.prevGroundedIndexes[indexTrail][i], this.prevGroundedRotations[indexTrail][i]);
-				
-				for(int j=0; j<4 - 1; j++) {
-					curStart = this.tryAttachCellInDir(curStart.i, curStart.j, RIGHT);
-					labels[curStart.i] = labelToUse;
+				if(this.layerIndexOf1x1Cell[indexTrail] < 0 || i < this.layerIndexOf1x1Cell[indexTrail]) {
+					//TODO: copy paste code
+					Coord2D curStart = new Coord2D(this.prevGroundedIndexes[indexTrail][i], this.prevGroundedRotations[indexTrail][i]);
 					
+					for(int j=0; j<4 - 1; j++) {
+						curStart = this.tryAttachCellInDir(curStart.i, curStart.j, RIGHT);
+						labels[curStart.i] = labelToUse;
+						
+					}
+					//END TODO: copy paste code
+				
+				} else {
+					
+					if(indexTrail == 0) {
+						labels[this.prevGroundedIndexes[indexTrail][i]] = "To";
+					} else {
+						labels[this.prevGroundedIndexes[indexTrail][i]] = "Bo";
+					}
 				}
-				//END TODO: copy paste code
 			}
 		}
 			
@@ -683,6 +754,17 @@ public class CuboidToFoldOnExtendedRotSym  implements CuboidToFoldOnInterface {
 		
 		test1.removePrevLayerFast(1);
 		test1.addNewLayerFast(7, 1);
+		
+		if(test1.is1x1CellAbleToBeAddedFast(0)) {
+			
+			if(test1.is1x1CellAbleToBeAddedForSideBumpFast(6, 0)) {
+				test1.addNew1x1CellFast(6, 0);
+			}
+			
+		}
+		
+		test1.addNew1x1CellFast(6, 1);
+		
 		test1.printCurrentStateOnOtherCuboidsFlatMap();
 		
 		System.out.println("Done!");
