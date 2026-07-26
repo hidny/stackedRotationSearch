@@ -28,7 +28,7 @@ public class SimplePhaseNx1x1SolutionsCounter {
 	public static void main(String args[]) {
 		
 		
-		Nx1x1CuboidToFold curSimpleNet = new Nx1x1CuboidToFold(N);
+		Nx1x1CuboidToFoldAndDrawNet curSimpleNet = new Nx1x1CuboidToFoldAndDrawNet(N);
 		
 		
 		
@@ -74,7 +74,7 @@ public class SimplePhaseNx1x1SolutionsCounter {
 	public static int numSolutions = 0;
 	public static int iterator = 0;
 	
-	public static void buildNet(Nx1x1CuboidToFold curSimpleNet, int numLevels) {
+	public static void buildNet(Nx1x1CuboidToFoldAndDrawNet curSimpleNet, int numLevels) {
 
 		iterator++;
 		
@@ -107,11 +107,11 @@ public class SimplePhaseNx1x1SolutionsCounter {
 		
 		
 		
-		for(int i=0; i<Nx1x1CuboidToFold.levelOptions.length; i++) {
+		for(int i=0; i<Nx1x1CuboidToFoldAndDrawNet.levelOptions.length; i++) {
 			
 
 			
-			for(int j=0; j<Nx1x1CuboidToFold.NUM_SIDE_BUMP_OPTIONS; j++) {
+			for(int j=0; j<Nx1x1CuboidToFoldAndDrawNet.NUM_SIDE_BUMP_OPTIONS; j++) {
 				
 				
 				//System.out.println( i + ", " + j);

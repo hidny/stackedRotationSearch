@@ -3,7 +3,7 @@ package NewModel.firstIteration;
 import Coord.Coord2D;
 import Model.CuboidToFoldOn;
 
-public class Nx1x1CuboidToFold {
+public class Nx1x1CuboidToFoldAndDrawNet {
 
 	//Current goals:
 	// 1) Only do legal stacks (if cells are isolated, then that's not ok)
@@ -67,23 +67,23 @@ public class Nx1x1CuboidToFold {
 	
 	public int heightOfCuboid;
 	
-	public Nx1x1CuboidToFold(int n) {
+	public Nx1x1CuboidToFoldAndDrawNet(int heightOfNetBottom1x1ToTop1x1) {
 		
 		initStaticConstants();
 		
 		this.numLevelsUsed = 0;
 		
-		this.sideBump = new int[n + 1];
-		this.optionUsedPerLevel = new int[n + 1];
-		this.cellsGrounded = new boolean[n + 1][WIDTH_LEVEL_OPTION];
-		this.cellsGroundedByLevelAbove = new boolean[n + 1][WIDTH_LEVEL_OPTION];
+		this.sideBump = new int[heightOfNetBottom1x1ToTop1x1];
+		this.optionUsedPerLevel = new int[heightOfNetBottom1x1ToTop1x1];
+		this.cellsGrounded = new boolean[heightOfNetBottom1x1ToTop1x1][WIDTH_LEVEL_OPTION];
+		this.cellsGroundedByLevelAbove = new boolean[heightOfNetBottom1x1ToTop1x1][WIDTH_LEVEL_OPTION];
 		
-		numCellsGroundedPrevLevel = new int[n + 1];
+		numCellsGroundedPrevLevel = new int[heightOfNetBottom1x1ToTop1x1];
 		
 		//TODO: just have a variable for n...
 		
 		
-		this.heightOfCuboid = n;
+		this.heightOfCuboid = heightOfNetBottom1x1ToTop1x1;
 	}
 
 	//TODO
@@ -104,7 +104,7 @@ public class Nx1x1CuboidToFold {
 	// I might need to also include: 
 	//int indexCuboidOnPaper2ndCuboid[][]
 	//We'll see.
-	public boolean addNextLevel(Coord2D newLevelDesc, CuboidToFoldOn otherCuboid) {
+	public boolean addNextLevel(Coord2D newLevelDesc) {
 		
 		boolean isMoveLegal = true;
 		
@@ -132,7 +132,7 @@ public class Nx1x1CuboidToFold {
 			}
 		
 		//TODO: add code for adding the last layer or the top.
-		} else if(this.numLevelsUsed == this.heightOfCuboid) {
+		} else if(this.numLevelsUsed == this.heightOfCuboid - 1) {
 			
 			if(this.numCellsGroundedPrevLevel[this.numLevelsUsed - 1] != 4) {
 				//System.out.println("WARNING: previous level isn't touching all 4 cells at the top (" + this.numCellsJoinedPrevLevel[this.numLevelsUsed - 1] + ")");
@@ -455,7 +455,7 @@ public class Nx1x1CuboidToFold {
 		
 		
 		int curXCoordStart = bottomXCoord;
-		for(int i=0; i<Math.min(this.numLevelsUsed, this.heightOfCuboid); i++) {
+		for(int i=0; i<Math.min(this.numLevelsUsed, this.heightOfCuboid - 1); i++) {
 			curXCoordStart += sideBump[i] - TOP_SHIFT_LEFT_1ST_IT;
 			
 			for(int j=0; j<WIDTH_LEVEL_OPTION; j++) {
@@ -465,7 +465,7 @@ public class Nx1x1CuboidToFold {
 			//TODO: You will have to do something different for the top level
 		}
 		
-		if(this.numLevelsUsed > this.heightOfCuboid) {
+		if(this.numLevelsUsed >= this.heightOfCuboid) {
 			//Insert last layer:
 			curXCoordStart += sideBump[this.numLevelsUsed - 1] - TOP_SHIFT_LEFT_1ST_IT;
 			
@@ -477,17 +477,17 @@ public class Nx1x1CuboidToFold {
 	
 	
 	
-	public static void origTest(CuboidToFoldOn testCuboid) {
-		Nx1x1CuboidToFold tmp = new Nx1x1CuboidToFold(25);
+	public static void origTest() {
+		Nx1x1CuboidToFoldAndDrawNet tmp = new Nx1x1CuboidToFoldAndDrawNet(25);
 		
 		System.out.println(tmp);
 		
 		//Test 1: Simple
-		tmp.addNextLevel(new Coord2D(0, 0), testCuboid);
+		tmp.addNextLevel(new Coord2D(0, 0));
 		System.out.println(tmp);
-		tmp.addNextLevel(new Coord2D(0, 0), testCuboid);
+		tmp.addNextLevel(new Coord2D(0, 0));
 		System.out.println(tmp);
-		tmp.addNextLevel(new Coord2D(0, 0), testCuboid);
+		tmp.addNextLevel(new Coord2D(0, 0));
 		System.out.println(tmp);
 		
 		tmp.removeCurrentTopLevel();
@@ -499,11 +499,11 @@ public class Nx1x1CuboidToFold {
 		
 
 		//Test 2: Change the amount of bump:
-		tmp.addNextLevel(new Coord2D(0, 3), testCuboid);
+		tmp.addNextLevel(new Coord2D(0, 3));
 		System.out.println(tmp);
-		tmp.addNextLevel(new Coord2D(0, 4), testCuboid);
+		tmp.addNextLevel(new Coord2D(0, 4));
 		System.out.println(tmp);
-		tmp.addNextLevel(new Coord2D(0, 5), testCuboid);
+		tmp.addNextLevel(new Coord2D(0, 5));
 		System.out.println(tmp);
 		
 
@@ -515,45 +515,44 @@ public class Nx1x1CuboidToFold {
 		System.out.println(tmp);
 		
 		//Test 3: test multiple different level options.
-		tmp.addNextLevel(new Coord2D(1, 3), testCuboid);
+		tmp.addNextLevel(new Coord2D(1, 3));
 		System.out.println(tmp);
-		tmp.addNextLevel(new Coord2D(2, 4), testCuboid);
+		tmp.addNextLevel(new Coord2D(2, 4));
 		System.out.println(tmp);
-		tmp.addNextLevel(new Coord2D(3, 5), testCuboid);
+		tmp.addNextLevel(new Coord2D(3, 5));
 		System.out.println(tmp);
-		tmp.addNextLevel(new Coord2D(0, 12), testCuboid);
+		tmp.addNextLevel(new Coord2D(0, 12));
 		System.out.println(tmp);
-		tmp.addNextLevel(new Coord2D(0, 6), testCuboid);
+		tmp.addNextLevel(new Coord2D(0, 6));
 		System.out.println(tmp);
-		tmp.addNextLevel(new Coord2D(1, 6), testCuboid);
+		tmp.addNextLevel(new Coord2D(1, 6));
 		System.out.println(tmp);
-		tmp.addNextLevel(new Coord2D(2, 6), testCuboid);
+		tmp.addNextLevel(new Coord2D(2, 6));
 		System.out.println(tmp);
-		tmp.addNextLevel(new Coord2D(3, 6), testCuboid);
+		tmp.addNextLevel(new Coord2D(3, 6));
 		System.out.println(tmp);
 
-		tmp.addNextLevel(new Coord2D(0, 9), testCuboid);
+		tmp.addNextLevel(new Coord2D(0, 9));
 		System.out.println(tmp);
 	}
 	
 	public static void secondTest() {
 		
-		CuboidToFoldOn testCuboid = new CuboidToFoldOn(3, 1, 1);
 		
 
-		Nx1x1CuboidToFold tmp = new Nx1x1CuboidToFold(3);
+		Nx1x1CuboidToFoldAndDrawNet tmp = new Nx1x1CuboidToFoldAndDrawNet(3);
 		
 		//Test 2: Change the amount of bump:
-		tmp.addNextLevel(new Coord2D(0, 3), testCuboid);
+		tmp.addNextLevel(new Coord2D(0, 3));
 		System.out.println(tmp);
 		
-		tmp.addNextLevel(new Coord2D(0, 4), testCuboid);
+		tmp.addNextLevel(new Coord2D(0, 4));
 		System.out.println(tmp);
 		
-		tmp.addNextLevel(new Coord2D(0, 5), testCuboid);
+		tmp.addNextLevel(new Coord2D(0, 5));
 		System.out.println(tmp);
 		
-		tmp.addNextLevel(new Coord2D(0, 10), testCuboid);
+		tmp.addNextLevel(new Coord2D(0, 10));
 		System.out.println(tmp);
 	}
 	
@@ -588,34 +587,34 @@ Net:
 	public static void main(String args[]) {
 		
 
-		Nx1x1CuboidToFold tmp = new Nx1x1CuboidToFold(4);
+		Nx1x1CuboidToFoldAndDrawNet tmp = new Nx1x1CuboidToFoldAndDrawNet(4);
 		
 		boolean valid = false;
 		//Test solution not counted:
-		valid = tmp.addNextLevel(new Coord2D(0, 3), null);
+		valid = tmp.addNextLevel(new Coord2D(0, 3));
 		System.out.println(tmp);
 		System.out.println("Valid: " + valid);
 		System.out.println("---");
 		
-		valid = tmp.addNextLevel(new Coord2D(1, 5), null);
+		valid = tmp.addNextLevel(new Coord2D(1, 5));
 		System.out.println(tmp);
 		System.out.println("Valid: " + valid);
 		System.out.println("---");
 
-		valid = tmp.addNextLevel(new Coord2D(3, 6), null);
+		valid = tmp.addNextLevel(new Coord2D(3, 6));
 		System.out.println(tmp);
 		System.out.println("Valid: " + valid);
 		System.out.println("---");
 
 		System.out.println("Now");
 		
-		valid = tmp.addNextLevel(new Coord2D(0, 8), null);
+		valid = tmp.addNextLevel(new Coord2D(0, 8));
 		System.out.println(tmp);
 		System.out.println("Valid: " + valid);
 		System.out.println("---");
 		
 
-		valid = tmp.addNextLevel(new Coord2D(0, 9), null);
+		valid = tmp.addNextLevel(new Coord2D(0, 9));
 		System.out.println(tmp);
 		System.out.println("Valid: " + valid);
 		System.out.println("---");

@@ -2,13 +2,14 @@ package searchForRotationallySymTODO;
 
 import Coord.Coord2D;
 import Coord.CoordWithRotationAndIndex;
+import Model.CuboidToFoldOn;
 import Model.CuboidToFoldOnInterface;
 import Model.DataModelViews;
 import Model.NeighbourGraphCreator;
 import Model.Utils;
 //import NewModelWithIntersection.fastRegionCheck.FastRegionCheck;
 //import NewModelWithIntersection.filterOutTwoTops.FilterOutTwoTopsFaster4;
-
+import NewModel.firstIteration.Nx1x1CuboidToFoldAndDrawNet;
 import  NewModelWithIntersection.topAndBottomTransitionList.TopAndBottomTransitionList2;
 
 public class CuboidToFoldOnExtendedRotSym  implements CuboidToFoldOnInterface {
@@ -730,6 +731,43 @@ public class CuboidToFoldOnExtendedRotSym  implements CuboidToFoldOnInterface {
 		
 	}
 	
+	public boolean[][] createResultantNetAsBoolArray() {
+		
+		boolean ret[][] = null;
+		
+		int height_Nx1x1 = (this.getNumCellsToFill() - 2) / 4;
+		//TODO make sure height_Nx1x1 == curHeightIfUnBuilt if built.
+		
+		
+		int curHeightIfUnBuilt = 2 + this.currentLayerIndex[0] + this.currentLayerIndex[1];
+		if( ! this.isEvenNumberOfLayers(this.getNumCellsToFill())) {
+			curHeightIfUnBuilt -= 1;
+		}
+		
+		Nx1x1CuboidToFoldAndDrawNet reference = new Nx1x1CuboidToFoldAndDrawNet(curHeightIfUnBuilt);
+		
+		//Start from the bottom:
+		
+		//WRONG, but it's a start:
+		for(int i=this.currentLayerIndex[1] - 1; i>=0; i--) {
+
+			reference.addNextLevel(new Coord2D(0, this.prevSideBumps[1][i]));
+			//if(this.currentLayerIndex[1])
+		}
+		for(int i=0; i<this.currentLayerIndex[0]; i++) {
+			
+			//if(this.currentLayerIndex[1])
+			reference.addNextLevel(new Coord2D(0, this.prevSideBumps[0][i]));
+		}
+		//reference.addNextLevel(neLevelDesc, otherCuboid)
+		
+		//reference. ??
+		
+		System.out.println("Current best effort:");
+		System.out.println(reference.toString());
+		
+		return reference.setupBoolArrayNet();
+	}
 
 	//END DEBUG PRINT STATE ON OTHER CUBOID:
 
@@ -768,5 +806,22 @@ public class CuboidToFoldOnExtendedRotSym  implements CuboidToFoldOnInterface {
 		test1.printCurrentStateOnOtherCuboidsFlatMap();
 		
 		System.out.println("Done!");
+		
+		boolean tmp[][] = test1.createResultantNetAsBoolArray();
+		
+		//tmp matches the toString function: (that's good!)
+		/*
+		for(int i=0; i<tmp.length; i++) {
+			for(int j=0; j<tmp[0].length; j++) {
+				if(tmp[i][j]) {
+					System.out.print("#");
+				} else {
+					System.out.print(".");
+				}
+			}
+			System.out.println();
+		}
+		System.out.println();
+		*/
 	}
 }

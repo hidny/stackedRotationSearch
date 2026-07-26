@@ -7,7 +7,7 @@ import DupRemover.BasicUniqueCheckImproved;
 import GraphUtils.PivotCellDescription;
 import GraphUtils.PivotCellDescriptionForSimplePhase;
 import Model.Utils;
-import NewModel.firstIteration.Nx1x1CuboidToFold;
+import NewModel.firstIteration.Nx1x1CuboidToFoldAndDrawNet;
 //import NewModelWithIntersection.fastRegionCheck.FastRegionCheck;
 import SolutionResolver.SolutionResolverInterface;
 import SolutionResolver.StandardResolverForSmallIntersectSolutions;
@@ -243,7 +243,7 @@ Found 133 unique solution."
 		int NofNx1x1Cuboid = getNumLayers(cuboidToBuild);
 
 		//TODO: will need to not use this as a reference!
-		Nx1x1CuboidToFold reference = new Nx1x1CuboidToFold(NofNx1x1Cuboid);
+		Nx1x1CuboidToFoldAndDrawNet reference = new Nx1x1CuboidToFoldAndDrawNet(NofNx1x1Cuboid);
 
 		ArrayList<PivotCellDescription> startingPointsAndRotationsToCheck = PivotCellDescriptionForSimplePhase.getUniqueRotationListsWithCellInfo(cuboidToBuild);
 		
@@ -287,7 +287,7 @@ Found 133 unique solution."
 		return (cuboidToBuild.getNumCellsToFill() - 2) / 4;
 	}
 	
-	public static long findReallySimpleSolutionsRecursion(Nx1x1CuboidToFold reference, CuboidToFoldOnExtendedRotSym cuboidToBuild) {
+	public static long findReallySimpleSolutionsRecursion(Nx1x1CuboidToFoldAndDrawNet reference, CuboidToFoldOnExtendedRotSym cuboidToBuild) {
 		return findReallySimpleSolutionsRecursion(reference, cuboidToBuild, 0, getNumLayers(cuboidToBuild), false);
 	}
 	
@@ -295,7 +295,7 @@ Found 133 unique solution."
 	public static long debug = 0;
 
 	
-	public static long findReallySimpleSolutionsRecursion(Nx1x1CuboidToFold reference, CuboidToFoldOnExtendedRotSym cuboidToBuild, int layerIndex, int numLayers, boolean debugNope) {
+	public static long findReallySimpleSolutionsRecursion(Nx1x1CuboidToFoldAndDrawNet reference, CuboidToFoldOnExtendedRotSym cuboidToBuild, int layerIndex, int numLayers, boolean debugNope) {
 
 		long ret = 0;
 		if(debug % DEBUG_MODULO == 0) {
