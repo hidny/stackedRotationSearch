@@ -619,6 +619,8 @@ Net:
 		System.out.println("Valid: " + valid);
 		System.out.println("---");
 		
+		
+		
 	}
 	
 	

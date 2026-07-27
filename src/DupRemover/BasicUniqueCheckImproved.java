@@ -25,6 +25,31 @@ public class BasicUniqueCheckImproved {
 		uniqList = new HashSet<BigInteger>();
 	}
 	
+	
+	public static boolean isUnique(boolean array[][]) {
+		
+		//Slow loop, but I just want something that works:
+		int numCells = 0;
+		for(int i=0; i<array.length; i++) {
+			for(int j=0; j<array[0].length; j++) {
+				if(array[i][j]) {
+					numCells++;
+				}
+			}
+		}
+		Coord2D paperToDevelop[] = new Coord2D[numCells];
+		int curIndex = 0;
+		for(int i=0; i<array.length; i++) {
+			for(int j=0; j<array[0].length; j++) {
+				if(array[i][j]) {
+					paperToDevelop[curIndex] = new Coord2D(i, j);
+					curIndex++;
+				}
+			}
+		}
+		return isUnique(paperToDevelop, array);
+	}
+	
 	public static boolean isUnique(Coord2D paperToDevelop[], boolean array[][]) {
 
 		int borders[] = Utils.getBorders(paperToDevelop);

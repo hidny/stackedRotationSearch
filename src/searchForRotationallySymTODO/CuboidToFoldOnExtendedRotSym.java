@@ -2,6 +2,7 @@ package searchForRotationallySymTODO;
 
 import Coord.Coord2D;
 import Coord.CoordWithRotationAndIndex;
+import DupRemover.BasicUniqueCheckImproved;
 import Model.CuboidToFoldOn;
 import Model.CuboidToFoldOnInterface;
 import Model.DataModelViews;
@@ -833,5 +834,30 @@ public class CuboidToFoldOnExtendedRotSym  implements CuboidToFoldOnInterface {
 		}
 		System.out.println();
 		*/
+		
+		boolean isUnique = BasicUniqueCheckImproved.isUnique(tmp);
+		
+		if(isUnique) {
+			System.out.println("First check is unique");
+		} else {
+			System.out.println("Doh! Is unique");
+			System.exit(1);
+			
+		}
+		
+		boolean isUnique2 = BasicUniqueCheckImproved.isUnique(tmp);
+		
+		//TODO: use C:\Users\Michael\projectEuler2\CuboidSimplePhaseNetSearch\src\OutputReader\CheckSolutionsCodesAgainstOtherCuboid2.java
+		// to check the solutions against another way to verify...
+		//That file looks for the key text: 'solution code: [NUMBER]'"
+		System.out.println("solution code: " + BasicUniqueCheckImproved.debugLastScore);
+		
+		if(isUnique2) {
+			System.out.println("Doh! Second check is unique");
+			System.exit(1);
+		} else {
+			System.out.println("Second check is not unique.");
+			
+		}
 	}
 }
