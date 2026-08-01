@@ -61,7 +61,7 @@ public class CuboidToFoldOnExtendedRotSym  implements CuboidToFoldOnInterface {
 	public static int NOT_APPLICABLE = -100;
 
 	
-	private static boolean isEvenNumberOfLayers(int area) {
+	public static boolean isEvenNumberOfLayers(int area) {
 		
 		//Nx1x1 version of the cuboid will be even iff area is 2 mod 8:
 		return (area - 2) % 8 == 0;

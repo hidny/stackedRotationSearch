@@ -427,4 +427,40 @@ public class Utils {
 		return rotSymSoFar;
 		
 	}
+	
+	public static boolean[][] covertToBool(int input[][]) {
+		boolean output[][] = new boolean[input.length][input[0].length];
+		
+		for(int i=0; i<output.length; i++) {
+			for(int j=0; j<output[0].length; j++) {
+				output[i][j] = (input[i][j] != 0);
+			}
+		}
+		
+		return output;
+		
+	}
+	
+	public static void main(String args[]) {
+		
+		int test1[][] = new int[][] {{1, 0}};
+		
+	
+		if(isRotSym(covertToBool(test1))) {
+			System.out.println("Test 1 passed!");
+		} else {
+			System.out.println("Test 1 failed.");
+		}
+
+		int test2[][] = new int[][] {{1, 1, 0}, {0, 1, 1}};
+
+		if(isRotSym(covertToBool(test2))) {
+			System.out.println("Test 2 passed!");
+		} else {
+			System.out.println("Test 2 failed.");
+		}
+		
+		
+		
+	}
 }

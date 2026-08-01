@@ -20,23 +20,28 @@ public class ReallySimpleIntersectFinder5 {
 		
 		//N: 5
 		//38460 solutions (Makes sense because it's Nx1x1) (9702 unique solutions)
+		//rotationally symmetric solutions found: 98
 		//reallySimpleSearch(5, 1, 1);
 		
 		//26 solutions: (7 unique solutions)
+		//rotationally symmetric solutions found: 1
 		//reallySimpleSearch(3, 2, 1);
 
 		//N: 7
 		//6 solutions: (2 unique solutions)
+		//rotationally symmetric solutions found: 1
 		//reallySimpleSearch(3, 3, 1);
 		
 
 		//N: 8
 		//404 solutions: (109 unique solutions)
+		//rotationally symmetric solutions found: 16
 		//reallySimpleSearch(5, 2, 1);
 		
 
 		//N: 9
 		//42 solutions: (12 unique solutions)
+		//rotationally symmetric solutions found: 3
 		//reallySimpleSearch(4, 3, 1);
 		
 
@@ -52,62 +57,80 @@ Done using the 2nd iteration (using pre-computed long arrays)
 Found 133 unique solution."
 */
 		//498 solutions: (133 unique solution)
+		//rotationally symmetric solutions found: 17
 		//reallySimpleSearch(3, 3, 2);
 		
 		
 		//N: 11
 		//2364 solutions: (591 unique solutions)
+		//rotationally symmetric solutions found: 0 ( It's 0 )
 		//reallySimpleSearch(3, 5, 1);
 		
 		//74 solutions (19 unique solutions)
+		//rotationally symmetric solutions found: 1
 		//reallySimpleSearch(7, 2, 1);
 		
 		
 		//N: 13
 		//680 solutions: (175 unique soltions)
+		//rotationally symmetric solutions found: 10
 		//reallySimpleSearch(3, 3, 3);
 		
 		//20 solutions: (6 unique solutions)
+		//rotationally symmetric solutions found: 2
 		//reallySimpleSearch(6, 3, 1);
 		
 		//N: 14
 		//16504 solutions (That's promising!) (4182 unique solutions)
+		//rotationally symmetric solutions found: 112
 		//reallySimpleSearch(5, 4, 1);
+		
 		//564 solutions (152 unique solutions)
+		//rotationally symmetric solutions found: 22
 		//reallySimpleSearch(9, 2, 1);
 		
 		//N:15
 		//722 solutions (184 unique solutions)
+		//rotationally symmetric solutions found: 7
 		//reallySimpleSearch(5, 3, 2);
+		
 		//36 solutions (9 unique solutions)
+		//rotationally symmetric solutions found: 0 (Another 0!)
 		//reallySimpleSearch(7, 3, 1);
 
 		//N:16
 		//3724 solutions (1285 unique solutions)
+		//rotationally symmetric solutions found: 77
 		//reallySimpleSearch(4, 3, 3);
 		
 		
 		//N: 17
 		// 115268 solutions (28817 uniq solutions) (This took 40 seconds)
+		//rotationally symmetric solutions found: 0
 		//reallySimpleSearch(5, 5, 1);
 		
 		//TODO: up to here...
 		// 60 solutions (17 unique) (7 minutes)
+		//rotationally symmetric solutions found: 4
 		//reallySimpleSearch(8, 3, 1);
+		
 		//114 solutions (29 unique)
+		//rotationally symmetric solutions found: 1
 		//reallySimpleSearch(11, 2, 1);
 		
 		//N: 19 (No luck)
 		// 8418 unique solution.
+		//Number of rotationally symmetric solutions found: 81
 		//reallySimpleSearch(5, 3, 3);
+		
 		// 27 unique solutions (under 80 seconds)
+		//rotationally symmetric solutions found: 3
 		//reallySimpleSearch(7, 4, 1);
 		
 		
 		//951 unique solution.
 		//reallySimpleSearch(9, 3, 1);
 		//
-		//UP TO HERE: April 23rd
 		
 		//N: 20
 		// Found 202106 unique solution.
@@ -182,7 +205,7 @@ Found 133 unique solution."
 
 		// N = 26
 		//268 unique solution for 17x2x1 (just over 16 minutes)
-		reallySimpleSearch(17, 2, 1);
+		//reallySimpleSearch(17, 2, 1);
 		
 
 		//9,885,286 uniq solutions (and about 9,885,263 unique solutions after searching the cell left of 5x1 side)
@@ -232,6 +255,8 @@ Found 133 unique solution."
 	public static SolutionResolverInterface solutionResolver;
 
 	public static void reallySimpleSearch(int a, int b, int c) {
+		
+		rotSymSolutions = 0;
 		
 		BasicUniqueCheckImproved.resetUniqList();
 		solutionResolver = new StandardResolverForSmallIntersectSolutions();

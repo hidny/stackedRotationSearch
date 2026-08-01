@@ -241,11 +241,9 @@ Found 133 unique solution."
 		}
 		
 		int NofNx1x1Cuboid = getNumLayers(cuboidToBuild);
+		
 
-		//TODO: will need to not use this as a reference!
-		Nx1x1CuboidToFoldAndDrawNet reference = new Nx1x1CuboidToFoldAndDrawNet(NofNx1x1Cuboid);
-
-		ArrayList<PivotCellDescription> startingPointsAndRotationsToCheck = PivotCellDescriptionForSimplePhase.getUniqueRotationListsWithCellInfo(cuboidToBuild);
+		ArrayList<PivotCellDescription> startingPointsAndRotationsToCheck = PivotCellDescription.getUniqueRotationListsWithCellInfo(cuboidToBuild);
 		
 		long ret = 0;
 		
@@ -261,14 +259,26 @@ Found 133 unique solution."
 			System.out.println("Current UTC timestamp in milliseconds: " + System.currentTimeMillis());
 			
 			cuboidToBuild = new CuboidToFoldOnExtendedRotSym(a, b, c/*, fastRegionCheckSetup*/);
-			cuboidToBuild.initializeNewBottomIndexAndRotation(otherCuboidStartIndex, otherCuboidStartRotation);
+			
+			int rangeSideBumps[] = null;
+			
+			if(CuboidToFoldOnExtendedRotSym.isEvenNumberOfLayers(cuboidToBuild.getNumCellsToFill())) {
+				rangeSideBumps = new int[] {3, 4, 5, 6, 7, 8, 9};
+				
+			} else {
+				rangeSideBumps = new int[] {-1};
+			}
+			
+			for(int j=0; j<rangeSideBumps.length; j++) {
+				cuboidToBuild.initializeNewBottomIndexAndRotation(otherCuboidStartIndex, otherCuboidStartRotation, rangeSideBumps[j]);
+			}
 			
 			/*if(fastRegionCheckSetup == null) {
 				System.out.println("oops");
 				System.exit(1);
 			}*/
 			
-			ret += findReallySimpleSolutionsRecursion(reference, cuboidToBuild);
+			ret += findReallySimpleSolutionsRecursion(cuboidToBuild);
 			
 			System.out.println("Done with trying to intersect 2nd cuboid that has a start index of " + otherCuboidStartIndex + " and a rotation index of " + otherCuboidStartRotation +".");
 			System.out.println("Current UTC timestamp in milliseconds: " + System.currentTimeMillis());
@@ -287,15 +297,15 @@ Found 133 unique solution."
 		return (cuboidToBuild.getNumCellsToFill() - 2) / 4;
 	}
 	
-	public static long findReallySimpleSolutionsRecursion(Nx1x1CuboidToFoldAndDrawNet reference, CuboidToFoldOnExtendedRotSym cuboidToBuild) {
-		return findReallySimpleSolutionsRecursion(reference, cuboidToBuild, 0, getNumLayers(cuboidToBuild), false);
+	public static long findReallySimpleSolutionsRecursion(CuboidToFoldOnExtendedRotSym cuboidToBuild) {
+		return findReallySimpleSolutionsRecursion(cuboidToBuild, 0, getNumLayers(cuboidToBuild), 0);
 	}
 	
 	public static final long DEBUG_MODULO =100000L;
 	public static long debug = 0;
 
 	
-	public static long findReallySimpleSolutionsRecursion(Nx1x1CuboidToFoldAndDrawNet reference, CuboidToFoldOnExtendedRotSym cuboidToBuild, int layerIndex, int numLayers, boolean debugNope) {
+	public static long findReallySimpleSolutionsRecursion(CuboidToFoldOnExtendedRotSym cuboidToBuild, int layerIndex, int numLayers, int indexTrail) {
 
 		long ret = 0;
 		if(debug % DEBUG_MODULO == 0) {
@@ -303,40 +313,47 @@ Found 133 unique solution."
 		}
 		debug++;
 		
-		if(layerIndex == numLayers) {
+		if(layerIndex >= numLayers - 1) {
 			
-			if(cuboidToBuild.isTopCellAbleToBeAddedFast()) {
+			if(cuboidToBuild.is1x1CellAbleToBeAddedFast(indexTrail)) {
 
 				for(int sideBump=6; sideBump <10; sideBump++) {
-					if(cuboidToBuild.isTopCellAbleToBeAddedForSideBumpFast(sideBump)) {
-						ret++;
+					if(cuboidToBuild.is1x1CellAbleToBeAddedForSideBumpFast(sideBump, indexTrail)) {
 						
-						reference.addNextLevel(new Coord2D(0, sideBump), null);
-						if(BasicUniqueCheckImproved.isUnique(Utils.getOppositeCornersOfNet(reference.setupBoolArrayNet()), reference.setupBoolArrayNet()) ){
-							System.out.println("Unique solution found");
-							System.out.println("Num unique solutions found: " + BasicUniqueCheckImproved.uniqList.size());
+						if(layerIndex == numLayers) {
+
+							ret++;
 							
-							System.out.println(reference.toString());
-							System.out.println("Solution code: " + BasicUniqueCheckImproved.debugLastScore);
+							cuboidToBuild.addNew1x1CellFast(sideBump, indexTrail);
 							
-							//TODO: this function is way too slow. What's going on?
-							cuboidToBuild.printCurrentStateOnOtherCuboidsFlatMap();
-							
-							if(debugNope) {
-								System.out.println("NOPE!");
+							if(BasicUniqueCheckImproved.isUnique(cuboidToBuild.createResultantNetAsBoolArray()) ){
+								System.out.println("Unique solution found");
+								System.out.println("Num unique solutions found: " + BasicUniqueCheckImproved.uniqList.size());
+								
+								cuboidToBuild.printCurrentStateOnOtherCuboidsFlatMap();
+								System.out.println("Solution code: " + BasicUniqueCheckImproved.debugLastScore);
+								
 							}
+
+							if(ret > 0) {
+								System.out.println("Found " + ret + " places for top from this net:");
+								
+								System.out.println("----");
+							}
+							
+							cuboidToBuild.removePrev1x1CellFast(indexTrail);
+							
+						} else {
+							
+							cuboidToBuild.addNew1x1CellFast(sideBump, indexTrail);
+							ret += findReallySimpleSolutionsRecursion(cuboidToBuild, layerIndex + 1, numLayers, indexTrail ^ 1);
+							cuboidToBuild.removePrev1x1CellFast(indexTrail);
 						}
-						reference.removeCurrentTopLevel();
+						
 					}
 				}
 				
-				if(ret > 0) {
-					System.out.println("Found " + ret + " places for top from this net:");
-					
-					//TODO: Make a debug function:
-					//cuboidToBuild.debugPrintCuboidOnFlatPaperAndValidateIt(reference);
-					System.out.println("----");
-				}
+				
 			}
 			
 			return ret;
@@ -349,18 +366,12 @@ Found 133 unique solution."
 				break;
 			}
 			
-			if(cuboidToBuild.isNewLayerValidSimpleFast(sideBump)) {
-				cuboidToBuild.addNewLayerFast(sideBump);
-				reference.addNextLevel(new Coord2D(0, sideBump), null);
+			if(cuboidToBuild.isNewLayerValidSimpleFast(sideBump, indexTrail)) {
+				cuboidToBuild.addNewLayerFast(sideBump, indexTrail);
 
-				
-				//if( cuboidToBuild.filterOutTwoTopsFaster4.isPossibleAfterBasicDeduction(cuboidToBuild.curState)) {
-					ret += findReallySimpleSolutionsRecursion(reference, cuboidToBuild, layerIndex + 1, numLayers, debugNope);
-				//}
-				
-				
-				cuboidToBuild.removePrevLayerFast();
-				reference.removeCurrentTopLevel();
+				ret += findReallySimpleSolutionsRecursion(cuboidToBuild, layerIndex + 1, numLayers, indexTrail ^ 1);
+
+				cuboidToBuild.removePrevLayerFast(indexTrail);
 			}
 		}
 		
