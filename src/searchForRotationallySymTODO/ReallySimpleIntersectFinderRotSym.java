@@ -30,6 +30,7 @@ public class ReallySimpleIntersectFinderRotSym {
 
 		//N: 8
 		//404 solutions: (109 unique solutions)
+		//BUg: now only have 30 unique solutions...
 		reallySimpleSearch(5, 2, 1);
 		
 
@@ -261,9 +262,11 @@ Found 133 unique solution."
 			cuboidToBuild = new CuboidToFoldOnExtendedRotSym(a, b, c/*, fastRegionCheckSetup*/);
 			
 			int rangeSideBumps[] = null;
+			int firstLayerIdnex = 0;
 			
 			if(CuboidToFoldOnExtendedRotSym.isEvenNumberOfLayers(cuboidToBuild.getNumCellsToFill())) {
 				rangeSideBumps = new int[] {3, 4, 5, 6, 7, 8, 9};
+				firstLayerIdnex = 1;
 				
 			} else {
 				rangeSideBumps = new int[] {-1};
@@ -271,6 +274,7 @@ Found 133 unique solution."
 			
 			for(int j=0; j<rangeSideBumps.length; j++) {
 				cuboidToBuild.initializeNewBottomIndexAndRotation(otherCuboidStartIndex, otherCuboidStartRotation, rangeSideBumps[j]);
+				
 			}
 			
 			/*if(fastRegionCheckSetup == null) {
@@ -278,7 +282,7 @@ Found 133 unique solution."
 				System.exit(1);
 			}*/
 			
-			ret += findReallySimpleSolutionsRecursion(cuboidToBuild);
+			ret += findReallySimpleSolutionsRecursion(cuboidToBuild, firstLayerIdnex);
 			
 			System.out.println("Done with trying to intersect 2nd cuboid that has a start index of " + otherCuboidStartIndex + " and a rotation index of " + otherCuboidStartRotation +".");
 			System.out.println("Current UTC timestamp in milliseconds: " + System.currentTimeMillis());
@@ -297,8 +301,8 @@ Found 133 unique solution."
 		return (cuboidToBuild.getNumCellsToFill() - 2) / 4;
 	}
 	
-	public static long findReallySimpleSolutionsRecursion(CuboidToFoldOnExtendedRotSym cuboidToBuild) {
-		return findReallySimpleSolutionsRecursion(cuboidToBuild, 0, getNumLayers(cuboidToBuild), 0);
+	public static long findReallySimpleSolutionsRecursion(CuboidToFoldOnExtendedRotSym cuboidToBuild, int firstLayerIdnex) {
+		return findReallySimpleSolutionsRecursion(cuboidToBuild, firstLayerIdnex, getNumLayers(cuboidToBuild), 0);
 	}
 	
 	public static final long DEBUG_MODULO =100000L;
@@ -371,6 +375,11 @@ Found 133 unique solution."
 			if(cuboidToBuild.isNewLayerValidSimpleFast(sideBump, indexTrail)) {
 				cuboidToBuild.addNewLayerFast(sideBump, indexTrail);
 
+				//if(layerIndex == 1) {
+				//	System.out.println("MICHAEL TEST!");
+				//	cuboidToBuild.printCurrentStateOnOtherCuboidsFlatMap();
+				//}
+				
 				ret += findReallySimpleSolutionsRecursion(cuboidToBuild, layerIndex + 1, numLayers, indexTrail ^ 1);
 
 				cuboidToBuild.removePrevLayerFast(indexTrail);

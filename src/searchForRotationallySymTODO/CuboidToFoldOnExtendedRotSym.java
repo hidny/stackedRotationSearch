@@ -122,7 +122,7 @@ public class CuboidToFoldOnExtendedRotSym  implements CuboidToFoldOnInterface {
 		
 		//Add first flipped layer if even # of layers:
 		
-		if(this.isEvenNumberOfLayers(this.getNumCellsToFill())) {
+		if(CuboidToFoldOnExtendedRotSym.isEvenNumberOfLayers(this.getNumCellsToFill())) {
 			//EVEN # layers
 			this.initialSepIfEvenLayers = initialSepIfEvenLayers;
 			
@@ -155,6 +155,7 @@ public class CuboidToFoldOnExtendedRotSym  implements CuboidToFoldOnInterface {
 		}
 		
 		
+		System.out.println("DEBUG: initializeNewBottomIndexAndRotation( " + startIndex + ", " + startRotationRelativeFlatMap + ", " + initialSepIfEvenLayers + ")");
 	}
 
 

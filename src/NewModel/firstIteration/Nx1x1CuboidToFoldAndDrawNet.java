@@ -467,7 +467,9 @@ public class Nx1x1CuboidToFoldAndDrawNet {
 		}
 		
 		//TODO: What did I call this.heightOfCuboid?
-		if(this.numLevelsUsed >= this.heightOfCuboid - 1) {
+		if(this.numLevelsUsed >= this.heightOfCuboid - 1
+				|| (this.heightOfCuboid % 2 == 1 && this.numLevelsUsed >= this.heightOfCuboid - 2)
+			) {
 			//Insert last layer:
 			curXCoordStart += sideBump[this.numLevelsUsed - 1] - TOP_SHIFT_LEFT_1ST_IT;
 			
