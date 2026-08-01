@@ -36,7 +36,7 @@ public class ReallySimpleIntersectFinder5 {
 		//N: 8
 		//404 solutions: (109 unique solutions)
 		//rotationally symmetric solutions found: 16
-		reallySimpleSearch(5, 2, 1);
+		//reallySimpleSearch(5, 2, 1);
 		
 
 		//N: 9

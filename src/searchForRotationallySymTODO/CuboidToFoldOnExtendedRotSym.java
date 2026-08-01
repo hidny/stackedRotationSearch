@@ -757,10 +757,11 @@ public class CuboidToFoldOnExtendedRotSym  implements CuboidToFoldOnInterface {
 		//TODO make sure height_Nx1x1 == curHeightIfUnBuilt if built.
 		
 		
-		int curHeightIfUnBuilt = 2 + this.currentLayerIndex[0] + this.currentLayerIndex[1];
-		if( ! this.isEvenNumberOfLayers(this.getNumCellsToFill())) {
-			curHeightIfUnBuilt -= 1;
-		}
+		int curHeightIfUnBuilt = this.currentLayerIndex[0] + this.currentLayerIndex[1];
+		//if(  CuboidToFoldOnExtendedRotSym.isEvenNumberOfLayers(this.getNumCellsToFill())) {
+			//System.exit(1);
+		//	curHeightIfUnBuilt -= 1;
+		//}
 		
 		Nx1x1CuboidToFoldAndDrawNet reference = new Nx1x1CuboidToFoldAndDrawNet(curHeightIfUnBuilt);
 		
