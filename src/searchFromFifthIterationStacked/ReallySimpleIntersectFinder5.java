@@ -17,6 +17,8 @@ public class ReallySimpleIntersectFinder5 {
 	public static long rotSymSolutions = 0;
 	
 	public static void main(String[] args) {
+
+		//reallySimpleSearch(2, 1, 1);
 		
 		//N: 5
 		//38460 solutions (Makes sense because it's Nx1x1) (9702 unique solutions)
@@ -36,7 +38,7 @@ public class ReallySimpleIntersectFinder5 {
 		//N: 8
 		//404 solutions: (109 unique solutions)
 		//rotationally symmetric solutions found: 16
-		//reallySimpleSearch(5, 2, 1);
+		reallySimpleSearch(5, 2, 1);
 		
 
 		//N: 9

@@ -16,6 +16,8 @@ public class ReallySimpleIntersectFinderRotSym {
 
 	public static void main(String[] args) {
 		
+		//reallySimpleSearch(2, 1, 1);
+		
 		//N: 5
 		//38460 solutions (Makes sense because it's Nx1x1) (9702 unique solutions)
 		//reallySimpleSearch(5, 1, 1);
@@ -32,8 +34,7 @@ public class ReallySimpleIntersectFinderRotSym {
 
 		//N: 8
 		//404 solutions: (109 unique solutions)
-		//TODO: BUG: now only have 30 unique solutions...
-		reallySimpleSearch(5, 2, 1);
+		//reallySimpleSearch(5, 2, 1);
 		
 
 		//N: 9
@@ -67,21 +68,24 @@ Found 133 unique solution."
 		//N: 13
 		//680 solutions: (175 unique soltions)
 		//reallySimpleSearch(3, 3, 3);
-		
+
 		//20 solutions: (6 unique solutions)
 		//reallySimpleSearch(6, 3, 1);
-		
+
 		//N: 14
 		//16504 solutions (That's promising!) (4182 unique solutions)
 		//reallySimpleSearch(5, 4, 1);
+
 		//564 solutions (152 unique solutions)
 		//reallySimpleSearch(9, 2, 1);
-		
+
 		//N:15
 		//722 solutions (184 unique solutions)
 		//reallySimpleSearch(5, 3, 2);
+
+		// ****UP TO HERE****:
 		//36 solutions (9 unique solutions)
-		//reallySimpleSearch(7, 3, 1);
+		reallySimpleSearch(7, 3, 1);
 
 		//N:16
 		//3724 solutions (1285 unique solutions)
@@ -277,22 +281,23 @@ Found 133 unique solution."
 			for(int j=0; j<rangeSideBumps.length; j++) {
 				cuboidToBuild.initializeNewBottomIndexAndRotation(otherCuboidStartIndex, otherCuboidStartRotation, rangeSideBumps[j]);
 				
+				/*if(fastRegionCheckSetup == null) {
+					System.out.println("oops");
+					System.exit(1);
+				}*/
+				
+				if( ! cuboidToBuild.isDudInit()) { 
+					ret += findReallySimpleSolutionsRecursion(cuboidToBuild, firstLayerIdnex);
+				
+					System.out.println("Done with trying to intersect 2nd cuboid that has a start index of " + otherCuboidStartIndex + " and a rotation index of " + otherCuboidStartRotation +".");
+					System.out.println("Current UTC timestamp in milliseconds: " + System.currentTimeMillis());
+				} else {
+					System.out.println("DUD");
+					//System.exit(1);
+				}
+				
 			}
 			
-			/*if(fastRegionCheckSetup == null) {
-				System.out.println("oops");
-				System.exit(1);
-			}*/
-			
-			if( ! cuboidToBuild.isDudInit()) { 
-				ret += findReallySimpleSolutionsRecursion(cuboidToBuild, firstLayerIdnex);
-			
-				System.out.println("Done with trying to intersect 2nd cuboid that has a start index of " + otherCuboidStartIndex + " and a rotation index of " + otherCuboidStartRotation +".");
-				System.out.println("Current UTC timestamp in milliseconds: " + System.currentTimeMillis());
-			} else {
-				System.out.println("DUD");
-				//System.exit(1);
-			}
 			
 		}
 		System.out.println("Done");
@@ -319,7 +324,7 @@ Found 133 unique solution."
 	public static long findReallySimpleSolutionsRecursion(CuboidToFoldOnExtendedRotSym cuboidToBuild, int layerIndex, int numLayers, int indexTrail) {
 
 		long ret = 0;
-		if(debug % DEBUG_MODULO == 0) {
+		if(debug % DEBUG_MODULO == 1000000) {
 			cuboidToBuild.printCurrentStateOnOtherCuboidsFlatMap();
 		}
 		debug++;
