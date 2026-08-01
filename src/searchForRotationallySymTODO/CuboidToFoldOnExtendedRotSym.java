@@ -314,6 +314,11 @@ public class CuboidToFoldOnExtendedRotSym  implements CuboidToFoldOnInterface {
 		this.currentLayerIndex[indexTrail]++;
 	}
 	
+	public boolean topAndBottomDontOccupySameSpace() {
+		return this.prevGroundedIndexes[0][layerIndexOf1x1Cell[0]] 
+				!=  this.prevGroundedIndexes[1][layerIndexOf1x1Cell[1]]; 
+	}
+	
 	public void removePrev1x1CellFast(int indexTrail) {
 		
 		currentLayerIndex[indexTrail]--;

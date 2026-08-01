@@ -20,17 +20,17 @@ public class ReallySimpleIntersectFinderRotSym {
 		//38460 solutions (Makes sense because it's Nx1x1) (9702 unique solutions)
 		//reallySimpleSearch(5, 1, 1);
 		
-		//26 solutions: (7 unique solutions)
-		reallySimpleSearch(3, 2, 1);
+		//26 solutions: (7 unique solutions) (good)
+		//reallySimpleSearch(3, 2, 1);
 
 		//N: 7
-		//6 solutions: (2 unique solutions)
+		//6 solutions: (2 unique solutions) (good)
 		//reallySimpleSearch(3, 3, 1);
 		
 
 		//N: 8
 		//404 solutions: (109 unique solutions)
-		//reallySimpleSearch(5, 2, 1);
+		reallySimpleSearch(5, 2, 1);
 		
 
 		//N: 9
@@ -322,23 +322,29 @@ Found 133 unique solution."
 						
 						if(layerIndex == numLayers) {
 
-							ret++;
-							
+
 							cuboidToBuild.addNew1x1CellFast(sideBump, indexTrail);
 							
-							if(BasicUniqueCheckImproved.isUnique(cuboidToBuild.createResultantNetAsBoolArray()) ){
-								System.out.println("Unique solution found");
-								System.out.println("Num unique solutions found: " + BasicUniqueCheckImproved.uniqList.size());
+							//Hacky way to check that the top cell and bottom cell are different:
+							if(cuboidToBuild.topAndBottomDontOccupySameSpace()) {
 								
-								cuboidToBuild.printCurrentStateOnOtherCuboidsFlatMap();
-								System.out.println("Solution code: " + BasicUniqueCheckImproved.debugLastScore);
+								ret++;
 								
-							}
-
-							if(ret > 0) {
-								System.out.println("Found " + ret + " places for top from this net:");
 								
-								System.out.println("----");
+								if(BasicUniqueCheckImproved.isUnique(cuboidToBuild.createResultantNetAsBoolArray()) ){
+									System.out.println("Unique solution found");
+									System.out.println("Num unique solutions found: " + BasicUniqueCheckImproved.uniqList.size());
+									
+									cuboidToBuild.printCurrentStateOnOtherCuboidsFlatMap();
+									System.out.println("Solution code: " + BasicUniqueCheckImproved.debugLastScore);
+									
+								}
+	
+								if(ret > 0) {
+									System.out.println("Found " + ret + " places for top from this net:");
+									
+									System.out.println("----");
+								}
 							}
 							
 							cuboidToBuild.removePrev1x1CellFast(indexTrail);

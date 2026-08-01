@@ -455,7 +455,8 @@ public class Nx1x1CuboidToFoldAndDrawNet {
 		
 		
 		int curXCoordStart = bottomXCoord;
-		for(int i=0; i<Math.min(this.numLevelsUsed, this.heightOfCuboid - 1); i++) {
+		System.out.println("Levels vs height: " + this.numLevelsUsed + " vs " +  this.heightOfCuboid);
+		for(int i=0; i<Math.min(this.numLevelsUsed - 1, this.heightOfCuboid - 2); i++) {
 			curXCoordStart += sideBump[i] - TOP_SHIFT_LEFT_1ST_IT;
 			
 			for(int j=0; j<WIDTH_LEVEL_OPTION; j++) {
@@ -465,7 +466,8 @@ public class Nx1x1CuboidToFoldAndDrawNet {
 			//TODO: You will have to do something different for the top level
 		}
 		
-		if(this.numLevelsUsed >= this.heightOfCuboid) {
+		//TODO: What did I call this.heightOfCuboid?
+		if(this.numLevelsUsed >= this.heightOfCuboid - 1) {
 			//Insert last layer:
 			curXCoordStart += sideBump[this.numLevelsUsed - 1] - TOP_SHIFT_LEFT_1ST_IT;
 			
