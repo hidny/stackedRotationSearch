@@ -398,4 +398,33 @@ public class Utils {
 			
 			return corners;
 		}
+		
+		
+	public static boolean isRotSym(boolean input[][]) {
+		int borders[] = getBorders(input);
+		boolean borderedInput[][] = new boolean[borders[1] -borders[0] + 1][borders[3] -borders[2] + 1];
+		
+		for(int i=0; i<borderedInput.length; i++) {
+			for(int j=0; j<borderedInput[0].length; j++) {
+				borderedInput[i][j] = input[i + borders[0]][j+ borders[2]];
+			}
+		}
+		
+		boolean rotSymSoFar = true;
+		
+		for(int i=0; i<borderedInput.length; i++) {
+			for(int j=0; j<borderedInput[0].length; j++) {
+				int otherI = borderedInput.length - i - 1;
+				int otherJ = borderedInput[0].length - j - 1;
+				
+				if(borderedInput[i][j] != borderedInput[otherI][otherJ]) {
+					rotSymSoFar = false;
+					break;
+				}
+			}
+		}
+		
+		return rotSymSoFar;
+		
+	}
 }

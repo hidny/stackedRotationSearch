@@ -14,6 +14,8 @@ import SolutionResolver.StandardResolverForSmallIntersectSolutions;
 
 public class ReallySimpleIntersectFinder5 {
 
+	public static long rotSymSolutions = 0;
+	
 	public static void main(String[] args) {
 		
 		//N: 5
@@ -55,7 +57,7 @@ Found 133 unique solution."
 		
 		//N: 11
 		//2364 solutions: (591 unique solutions)
-		reallySimpleSearch(3, 5, 1);
+		//reallySimpleSearch(3, 5, 1);
 		
 		//74 solutions (19 unique solutions)
 		//reallySimpleSearch(7, 2, 1);
@@ -180,7 +182,7 @@ Found 133 unique solution."
 
 		// N = 26
 		//268 unique solution for 17x2x1 (just over 16 minutes)
-		//reallySimpleSearch(17, 2, 1);
+		reallySimpleSearch(17, 2, 1);
 		
 
 		//9,885,286 uniq solutions (and about 9,885,263 unique solutions after searching the cell left of 5x1 side)
@@ -223,6 +225,8 @@ Found 133 unique solution."
 		
 		//
 		//reallySimpleSearch(9, 3, 2);
+		
+		System.out.println("Number of rotationally symmetric solutions found: " + rotSymSolutions);
 	}
 	
 	public static SolutionResolverInterface solutionResolver;
@@ -242,7 +246,7 @@ Found 133 unique solution."
 		
 		int NofNx1x1Cuboid = getNumLayers(cuboidToBuild);
 
-		Nx1x1CuboidToFoldAndDrawNet reference = new Nx1x1CuboidToFoldAndDrawNet(NofNx1x1Cuboid);
+		Nx1x1CuboidToFoldAndDrawNet reference = new Nx1x1CuboidToFoldAndDrawNet(NofNx1x1Cuboid + 1);
 
 		ArrayList<PivotCellDescription> startingPointsAndRotationsToCheck = PivotCellDescriptionForSimplePhase.getUniqueRotationListsWithCellInfo(cuboidToBuild);
 		
@@ -290,8 +294,9 @@ Found 133 unique solution."
 		return findReallySimpleSolutionsRecursion(reference, cuboidToBuild, 0, getNumLayers(cuboidToBuild), false);
 	}
 	
-	public static final long DEBUG_MODULO =100000L;
+	public static final long DEBUG_MODULO =10000000L;
 	public static long debug = 0;
+	
 
 	
 	public static long findReallySimpleSolutionsRecursion(Nx1x1CuboidToFoldAndDrawNet reference, CuboidToFoldOnExtendedFaster5 cuboidToBuild, int layerIndex, int numLayers, boolean debugNope) {
@@ -310,7 +315,7 @@ Found 133 unique solution."
 					if(cuboidToBuild.isTopCellAbleToBeAddedForSideBumpFast(sideBump)) {
 						ret++;
 						
-						reference.addNextLevel(new Coord2D(0, sideBump), null);
+						reference.addNextLevel(new Coord2D(0, sideBump));
 						if(BasicUniqueCheckImproved.isUnique(Utils.getOppositeCornersOfNet(reference.setupBoolArrayNet()), reference.setupBoolArrayNet()) ){
 							System.out.println("Unique solution found");
 							System.out.println("Num unique solutions found: " + BasicUniqueCheckImproved.uniqList.size());
@@ -323,6 +328,11 @@ Found 133 unique solution."
 							
 							if(debugNope) {
 								System.out.println("NOPE!");
+							}
+							
+							if(Utils.isRotSym(reference.setupBoolArrayNet())) {
+								rotSymSolutions++;
+								System.out.println("Found rotationally symmetric net!");
 							}
 						}
 						reference.removeCurrentTopLevel();
@@ -350,7 +360,7 @@ Found 133 unique solution."
 			
 			if(cuboidToBuild.isNewLayerValidSimpleFast(sideBump)) {
 				cuboidToBuild.addNewLayerFast(sideBump);
-				reference.addNextLevel(new Coord2D(0, sideBump), null);
+				reference.addNextLevel(new Coord2D(0, sideBump));
 
 				
 				//if( cuboidToBuild.filterOutTwoTopsFaster4.isPossibleAfterBasicDeduction(cuboidToBuild.curState)) {
