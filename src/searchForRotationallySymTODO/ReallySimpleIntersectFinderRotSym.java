@@ -20,6 +20,8 @@ public class ReallySimpleIntersectFinderRotSym {
 		//38460 solutions (Makes sense because it's Nx1x1) (9702 unique solutions)
 		//reallySimpleSearch(5, 1, 1);
 		
+		//reallySimpleSearch(4, 1, 1);
+		
 		//26 solutions: (7 unique solutions) (good)
 		//reallySimpleSearch(3, 2, 1);
 
@@ -30,7 +32,7 @@ public class ReallySimpleIntersectFinderRotSym {
 
 		//N: 8
 		//404 solutions: (109 unique solutions)
-		//BUg: now only have 30 unique solutions...
+		//TODO: BUG: now only have 30 unique solutions...
 		reallySimpleSearch(5, 2, 1);
 		
 
@@ -282,10 +284,15 @@ Found 133 unique solution."
 				System.exit(1);
 			}*/
 			
-			ret += findReallySimpleSolutionsRecursion(cuboidToBuild, firstLayerIdnex);
+			if( ! cuboidToBuild.isDudInit()) { 
+				ret += findReallySimpleSolutionsRecursion(cuboidToBuild, firstLayerIdnex);
 			
-			System.out.println("Done with trying to intersect 2nd cuboid that has a start index of " + otherCuboidStartIndex + " and a rotation index of " + otherCuboidStartRotation +".");
-			System.out.println("Current UTC timestamp in milliseconds: " + System.currentTimeMillis());
+				System.out.println("Done with trying to intersect 2nd cuboid that has a start index of " + otherCuboidStartIndex + " and a rotation index of " + otherCuboidStartRotation +".");
+				System.out.println("Current UTC timestamp in milliseconds: " + System.currentTimeMillis());
+			} else {
+				System.out.println("DUD");
+				//System.exit(1);
+			}
 			
 		}
 		System.out.println("Done");
@@ -371,6 +378,8 @@ Found 133 unique solution."
 		
 		for(int sideBump=3; sideBump <10; sideBump++) {
 			
+			//System.out.println("TEST sideBump: " + sideBump);
+			//System.out.println("TEST: " + indexTrail + ": " + cuboidToBuild.currentLayerIndex[indexTrail]);
 			
 			if(cuboidToBuild.isNewLayerValidSimpleFast(sideBump, indexTrail)) {
 				cuboidToBuild.addNewLayerFast(sideBump, indexTrail);

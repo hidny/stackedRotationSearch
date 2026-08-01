@@ -72,8 +72,8 @@ public class CuboidToFoldOnExtendedRotSym  implements CuboidToFoldOnInterface {
 	}
 	
 	public static final int DUD_INTT = -1;
-	private boolean isDudInit() {
-		return this.currentLayerIndex[0] == DUD_INTT;
+	public boolean isDudInit() {
+		return this.currentLayerIndex[0] == DUD_INTT || currentLayerIndex[1] == DUD_INTT;
 	}
 	
 	public void initializeNewBottomIndexAndRotation(int startIndex, int startRotationRelativeFlatMap, int initialSepIfEvenLayers) {
@@ -155,7 +155,7 @@ public class CuboidToFoldOnExtendedRotSym  implements CuboidToFoldOnInterface {
 		}
 		
 		
-		System.out.println("DEBUG: initializeNewBottomIndexAndRotation( " + startIndex + ", " + startRotationRelativeFlatMap + ", " + initialSepIfEvenLayers + ")");
+		//System.out.println("DEBUG: initializeNewBottomIndexAndRotation( " + startIndex + ", " + startRotationRelativeFlatMap + ", " + initialSepIfEvenLayers + ")");
 	}
 
 
@@ -198,7 +198,9 @@ public class CuboidToFoldOnExtendedRotSym  implements CuboidToFoldOnInterface {
 	private int prevSideBumps[][];
 	private int prevGroundedIndexes[][];
 	private int prevGroundedRotations[][];
-	private int currentLayerIndex[];
+
+	//TODO:
+	public int currentLayerIndex[];
 	private int layerIndexOf1x1Cell[];
 	
 	private long debugThru = 0L;
@@ -219,6 +221,11 @@ public class CuboidToFoldOnExtendedRotSym  implements CuboidToFoldOnInterface {
 	public boolean isNewLayerValidSimpleFast(int sideBump, int indexTrail) {
 	
 		//System.out.println("Side Bump test: " + sideBump);
+		//System.out.println("this.prevGroundedIndexes[indexTrail]: " + this.prevGroundedIndexes[indexTrail]);
+		//System.out.println("this.prevGroundedRotations[indexTrail]: " + this.prevGroundedRotations[indexTrail]);
+		//System.out.println("indexTrail: " + indexTrail);
+		//System.out.println("this.currentLayerIndex[indexTrail]: " +this.currentLayerIndex[indexTrail]);
+		
 		long tmp[] = answerSheet
 				[this.prevGroundedIndexes[indexTrail][this.currentLayerIndex[indexTrail]]]
 				[this.prevGroundedRotations[indexTrail][this.currentLayerIndex[indexTrail]]]

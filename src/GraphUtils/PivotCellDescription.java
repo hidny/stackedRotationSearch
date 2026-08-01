@@ -170,7 +170,8 @@ Cell and rotation: 4 and 1
 					break;
 				}
 			}
-			
+
+			//TODO: put it back and test 8x1x1
 			if(noMatchYet) {
 				ret.add(listPivots.get(i));
 			}
