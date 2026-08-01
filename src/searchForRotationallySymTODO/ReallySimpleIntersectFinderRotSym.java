@@ -83,10 +83,11 @@ Found 133 unique solution."
 		//722 solutions (184 unique solutions)
 		//reallySimpleSearch(5, 3, 2);
 
-		// ****UP TO HERE****:
 		//36 solutions (9 unique solutions)
-		reallySimpleSearch(7, 3, 1);
+		//reallySimpleSearch(7, 3, 1);
 
+
+		// ****UP TO HERE****: (Counting all solutions)
 		//N:16
 		//3724 solutions (1285 unique solutions)
 		//reallySimpleSearch(4, 3, 3);
