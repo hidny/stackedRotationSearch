@@ -34,7 +34,11 @@ public class CuboidToFoldOnExtendedRotSym  implements CuboidToFoldOnInterface {
 		dimensions[1] = b;
 		dimensions[2] = c;
 
-		DIM_N_OF_Nx1x1_DIV_2 = (Utils.getTotalArea(this.dimensions)-2) / 8;
+		//TODO: put it back later:
+		//DIM_N_OF_Nx1x1_DIV_2 = (Utils.getTotalArea(this.dimensions)-2) / 8;
+		
+		//Make it big enough:
+		DIM_N_OF_Nx1x1_DIV_2 = Utils.getTotalArea(this.dimensions);
 		
 		if(setup) {
 			setupAnswerSheetInBetweenLayers();
@@ -74,8 +78,8 @@ public class CuboidToFoldOnExtendedRotSym  implements CuboidToFoldOnInterface {
 	
 	public void initializeNewBottomIndexAndRotation(int startIndex, int startRotationRelativeFlatMap, int initialSepIfEvenLayers) {
 		
-		prevGroundedIndexes = new int[2][DIM_N_OF_Nx1x1_DIV_2];
-		prevGroundedRotations = new int[2][DIM_N_OF_Nx1x1_DIV_2];
+		prevGroundedIndexes = new int[2][DIM_N_OF_Nx1x1_DIV_2 + 1];
+		prevGroundedRotations = new int[2][DIM_N_OF_Nx1x1_DIV_2 + 1];
 		prevSideBumps = new int[2][DIM_N_OF_Nx1x1_DIV_2];
 		
 		this.prevGroundedIndexes[0][0] = startIndex;
@@ -213,13 +217,13 @@ public class CuboidToFoldOnExtendedRotSym  implements CuboidToFoldOnInterface {
 	
 	public boolean isNewLayerValidSimpleFast(int sideBump, int indexTrail) {
 	
-		System.out.println("Side Bump test: " + sideBump);
+		//System.out.println("Side Bump test: " + sideBump);
 		long tmp[] = answerSheet
 				[this.prevGroundedIndexes[indexTrail][this.currentLayerIndex[indexTrail]]]
 				[this.prevGroundedRotations[indexTrail][this.currentLayerIndex[indexTrail]]]
 				[sideBump];
 
-		System.out.println("Test valid:");
+		/*System.out.println("Test valid:");
 		System.out.println(tmp[0]);
 		System.out.println(tmp[1]);
 		System.out.println(tmp[2]);
@@ -228,7 +232,7 @@ public class CuboidToFoldOnExtendedRotSym  implements CuboidToFoldOnInterface {
 		System.out.println(curState[0]);
 		System.out.println(curState[1]);
 		System.out.println(curState[2]);
-	
+		 */
 		return ((curState[0] & tmp[0]) | (curState[1] & tmp[1]) | (curState[2] & tmp[2])) == 0L /*&& ! unoccupiedRegionSplit(tmp, sideBump)*/;
 		
 	}

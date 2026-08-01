@@ -21,7 +21,7 @@ public class ReallySimpleIntersectFinderRotSym {
 		//reallySimpleSearch(5, 1, 1);
 		
 		//26 solutions: (7 unique solutions)
-		//reallySimpleSearch(3, 2, 1);
+		reallySimpleSearch(3, 2, 1);
 
 		//N: 7
 		//6 solutions: (2 unique solutions)
@@ -55,7 +55,7 @@ Found 133 unique solution."
 		
 		//N: 11
 		//2364 solutions: (591 unique solutions)
-		reallySimpleSearch(3, 5, 1);
+		//reallySimpleSearch(3, 5, 1);
 		
 		//74 solutions (19 unique solutions)
 		//reallySimpleSearch(7, 2, 1);
@@ -360,11 +360,7 @@ Found 133 unique solution."
 		}
 		
 		for(int sideBump=3; sideBump <10; sideBump++) {
-			if(layerIndex == 0 && sideBump > 6) {
-				//TODO: make it faster by only starting recursion on the next layer...
-				// I'm too lazy to do that for now.
-				break;
-			}
+			
 			
 			if(cuboidToBuild.isNewLayerValidSimpleFast(sideBump, indexTrail)) {
 				cuboidToBuild.addNewLayerFast(sideBump, indexTrail);
