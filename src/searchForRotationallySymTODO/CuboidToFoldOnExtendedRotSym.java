@@ -270,7 +270,7 @@ public class CuboidToFoldOnExtendedRotSym  implements CuboidToFoldOnInterface {
 		
 		this.currentLayerIndex[indexTrail]++;
 	}
-	
+
 	public void removePrevLayerFast(int indexTrail) {
 		
 		currentLayerIndex[indexTrail]--;
@@ -285,6 +285,10 @@ public class CuboidToFoldOnExtendedRotSym  implements CuboidToFoldOnInterface {
 		curState[0] = curState[0] ^ tmp[0];
 		curState[1] = curState[1] ^ tmp[1];
 		curState[2] = curState[2] ^ tmp[2];
+	}
+
+	public int getLastAdded(int indexTrail) {
+		return this.prevSideBumps[indexTrail][currentLayerIndex[indexTrail] - 1];
 	}
 	
 	
@@ -347,6 +351,7 @@ public class CuboidToFoldOnExtendedRotSym  implements CuboidToFoldOnInterface {
 		curState[2] = curState[2] ^ tmp[2];
 		*/
 	}
+
 	
 	//TODO: deal with top/bottom cell later:
 	
@@ -372,6 +377,7 @@ public class CuboidToFoldOnExtendedRotSym  implements CuboidToFoldOnInterface {
 		
 		return ((~curState[0] & tmp[0]) | (~curState[1] & tmp[1]) | (~curState[2] & tmp[2])) != 0;
 	}
+	
 	
 	private void setupAnswerSheetInBetweenLayers() {
 		
@@ -750,6 +756,10 @@ public class CuboidToFoldOnExtendedRotSym  implements CuboidToFoldOnInterface {
 	}
 	
 	public boolean[][] createResultantNetAsBoolArray() {
+		return createResultantNetAsBoolArray(false);
+	}
+	
+	public boolean[][] createResultantNetAsBoolArray(boolean print) {
 		
 		boolean ret[][] = null;
 		
@@ -792,8 +802,10 @@ public class CuboidToFoldOnExtendedRotSym  implements CuboidToFoldOnInterface {
 		
 		//reference. ??
 		
-		System.out.println("Current best effort:");
-		System.out.println(reference.toString());
+		if(print) {
+			System.out.println("Current best effort:");
+			System.out.println(reference.toString());
+		}
 		
 		return reference.setupBoolArrayNet();
 	}

@@ -14,6 +14,9 @@ import SolutionResolver.StandardResolverForSmallIntersectSolutions;
 
 public class ReallySimpleIntersectFinderRotSym {
 
+
+	public static long rotSymSolutions = 0;
+	
 	public static void main(String[] args) {
 		
 		//reallySimpleSearch(2, 1, 1);
@@ -25,20 +28,24 @@ public class ReallySimpleIntersectFinderRotSym {
 		//reallySimpleSearch(4, 1, 1);
 		
 		//26 solutions: (7 unique solutions) (good)
+		//rotationally symmetric solutions found: 1
 		//reallySimpleSearch(3, 2, 1);
 
 		//N: 7
 		//6 solutions: (2 unique solutions) (good)
+		//rotationally symmetric solutions found: 1
 		//reallySimpleSearch(3, 3, 1);
 		
 
 		//N: 8
 		//404 solutions: (109 unique solutions)
+		//rotationally symmetric solutions found: 16
 		//reallySimpleSearch(5, 2, 1);
 		
 
 		//N: 9
 		//42 solutions: (12 unique solutions)
+		//rotationally symmetric solutions found: 3
 		//reallySimpleSearch(4, 3, 1);
 		
 
@@ -54,87 +61,111 @@ Done using the 2nd iteration (using pre-computed long arrays)
 Found 133 unique solution."
 */
 		//498 solutions: (133 unique solution)
+		//rotationally symmetric solutions found: 17
 		//reallySimpleSearch(3, 3, 2);
 		
 		
 		//N: 11
 		//2364 solutions: (591 unique solutions)
+		//rotationally symmetric solutions found: 0
 		//reallySimpleSearch(3, 5, 1);
 		
 		//74 solutions (19 unique solutions)
+		//rotationally symmetric solutions found: 1
 		//reallySimpleSearch(7, 2, 1);
 		
 		
 		//N: 13
-		//680 solutions: (175 unique soltions)
+		//680 solutions: (10 unique solutions)
+		//rotationally symmetric solutions found: 10
 		//reallySimpleSearch(3, 3, 3);
 
 		//20 solutions: (6 unique solutions)
+		//rotationally symmetric solutions found: 2
 		//reallySimpleSearch(6, 3, 1);
 
 		//N: 14
 		//16504 solutions (That's promising!) (4182 unique solutions)
+		//rotationally symmetric solutions found: 112
 		//reallySimpleSearch(5, 4, 1);
 
 		//564 solutions (152 unique solutions)
+		//rotationally symmetric solutions found: 22
 		//reallySimpleSearch(9, 2, 1);
 
 		//N:15
 		//722 solutions (184 unique solutions)
+		//rotationally symmetric solutions found: 7
 		//reallySimpleSearch(5, 3, 2);
 
 		//36 solutions (9 unique solutions)
+		//rotationally symmetric solutions found: 0
 		//reallySimpleSearch(7, 3, 1);
 
 
-		// ****UP TO HERE****: (Counting all solutions)
 		//N:16
 		//3724 solutions (1285 unique solutions)
+		//rotationally symmetric solutions found: 77
 		//reallySimpleSearch(4, 3, 3);
 		
 		
 		//N: 17
 		// 115268 solutions (28817 uniq solutions) (This took 40 seconds)
+		// rotationally symmetric solutions found: 0
 		//reallySimpleSearch(5, 5, 1);
 		
-		//TODO: up to here...
 		// 60 solutions (17 unique) (7 minutes)
+		//rotationally symmetric solutions found: 4
 		//reallySimpleSearch(8, 3, 1);
+		
+		
 		//114 solutions (29 unique)
+		//rotationally symmetric solutions found: 1
 		//reallySimpleSearch(11, 2, 1);
 		
 		//N: 19 (No luck)
 		// 8418 unique solution.
+		//rotationally symmetric solutions found: 81
 		//reallySimpleSearch(5, 3, 3);
+		
+		
 		// 27 unique solutions (under 80 seconds)
+		//rotationally symmetric solutions found: 3
 		//reallySimpleSearch(7, 4, 1);
 		
 		
 		//951 unique solution.
+		//rotationally symmetric solutions found: 0
 		//reallySimpleSearch(9, 3, 1);
-		//
-		//UP TO HERE: April 23rd
+		
 		
 		//N: 20
 		// Found 202106 unique solution.
+		// rotationally symmetric solutions found: 784
 		//reallySimpleSearch(6, 5, 1);
+		
 		// 296 unique solutions
+		// rotationally symmetric solutions found: 10
 		//reallySimpleSearch(7, 3, 2);
+		
 		//Found 798 non-unique solutions and 211 unique solution.
+		//rotationally symmetric solutions found: 23
 		//reallySimpleSearch(13, 2, 1);
-		//
 		
 		//N = 21
 		//Found 11 unique solution.
+		//rotationally symmetric solutions found: 4
 		//reallySimpleSearch(10, 3, 1);
 
 		// N = 22
 		//{5, 5, 2}, {6, 3, 3}
 		// 24 uniq solutions
+		//rotationally symmetric solutions found: 4
 		//reallySimpleSearch(5, 5, 2);
 		
 
 		//Found 58891 unique solution.
+		//rotationally symmetric solutions found: 542
 		//reallySimpleSearch(6, 3, 3);
 		
 		// N = 23 (4 other ones...)
@@ -147,21 +178,25 @@ Found 133 unique solution."
 		
 		
 		//5, 4, 3 118 different solutions and 61 unique solution.
+		//rotationally symmetric solutions found: 5
 		//reallySimpleSearch(5, 4, 3);
-		//System.exit(1);
 
 		 //7, 5, 1
 		//Found 1411798 unique solution.
+		//rotationally symmetric solutions found: 0
 		//reallySimpleSearch(7, 5, 1);
 		
 		 //11,3,1: (took about 20 hours)51 different solutions and  15 unique solution. (Latest change: less than 2 hours)
+		//rotationally symmetric solutions found: 0
 		//reallySimpleSearch(11, 3, 1);
 		
 		// Found 28 unique solution.
+		// rotationally symmetric solutions found: 0 (0 with a dimension that's even!)
 		//reallySimpleSearch(15, 2, 1);
 
 		//N=24:
 		//Found 6853 unique solution.
+		//rotationally symmetric solutions found: 160
 		//reallySimpleSearch(9, 4, 1);
 		
 
@@ -174,68 +209,82 @@ Found 133 unique solution."
 		 */
 
 		//Found 410329 unique solution.
+		//rotationally symmetric solutions found: 522
 		//reallySimpleSearch(7, 3, 3);
-		//System.exit(1);
 
 		//Found 64 unique solution.
+		//rotationally symmetric solutions found: 9
 		//reallySimpleSearch(9, 3, 2);
-		//System.exit(1);
 
 
 		//28 unique solution.
+		//rotationally symmetric solutions found: 7
 		//reallySimpleSearch(12, 3, 1);
-		//System.exit(1);
 
 		// N = 26
 		//268 unique solution for 17x2x1 (just over 16 minutes)
+		//rotationally symmetric solutions found: 25
 		//reallySimpleSearch(17, 2, 1);
 		
 
 		//9,885,286 uniq solutions (and about 9,885,263 unique solutions after searching the cell left of 5x1 side)
+		//rotationally symmetric solutions found: 5488
 		//reallySimpleSearch(8, 5, 1);
 		
 		// N = 27
 		//1310 unique solution
+		//rotationally symmetric solutions found: 0
 		//reallySimpleSearch(13, 3, 1);
 		
 		//Found 154 unique solution.
+		//rotationally symmetric solutions found: 4
 		//reallySimpleSearch(5, 5, 3);
 		
 		//Found 50 unique solution.
+		//rotationally symmetric solutions found: 3
 		//reallySimpleSearch(7, 6, 1);
 		
 		//N = 28
 
 		//Found 2870327 unique solution.
+		//rotationally symmetric solutions found: 3662
 		//reallySimpleSearch(8, 3, 3);
 		
 		// N = 29 (5 other ones...)
 		//Found 165 unique solution.
+		//rotationally symmetric solutions found: 4
 		//reallySimpleSearch(7, 5, 2);
 		
 		//Found 36 unique solution.
+		//This one is slow!
+		//TODO: you might have to do the region split logic after all!
+		//rotationally symmetric solutions found: 0
 		//reallySimpleSearch(11, 4, 1);
 		
 		
-		//Not done yet:
 		// N =30:
+		//rotationally symmetric solutions found: 67
 		//reallySimpleSearch(7, 4, 3);
+		
+		//rotationally symmetric solutions found: 10
 		//reallySimpleSearch(11, 3, 2);
 		
+		//Oh crap!
+		//My conjecture is broken!
+		//rotationally symmetric solutions found: 2
+		reallySimpleSearch(5, 5, 5);
 		
-		//reallySimpleSearch(5, 5, 5);
 		
-		//for(int j=13; j<20; j++) {
-		//	reallySimpleSearch(j, 3, 1);
-		//}
-		
-		//
 		//reallySimpleSearch(9, 3, 2);
+		
+		System.out.println("Number of rotationally symmetric solutions found: " + rotSymSolutions);
 	}
 	
 	public static SolutionResolverInterface solutionResolver;
 
 	public static void reallySimpleSearch(int a, int b, int c) {
+
+		rotSymSolutions = 0;
 		
 		BasicUniqueCheckImproved.resetUniqList();
 		solutionResolver = new StandardResolverForSmallIntersectSolutions();
@@ -322,7 +371,12 @@ Found 133 unique solution."
 	public static long debug = 0;
 
 	
-	public static long findReallySimpleSolutionsRecursion(CuboidToFoldOnExtendedRotSym cuboidToBuild, int layerIndex, int numLayers, int indexTrail) {
+	public static long findReallySimpleSolutionsRecursion(
+			CuboidToFoldOnExtendedRotSym cuboidToBuild,
+			int layerIndex,
+			int numLayers,
+			int indexTrail
+		) {
 
 		long ret = 0;
 		if(debug % DEBUG_MODULO == 1000000) {
@@ -347,14 +401,26 @@ Found 133 unique solution."
 								
 								ret++;
 								
+								//TODO: maybe also cut the margins, so you don't have to do it again?
+								boolean boolArrayAnswer[][] = cuboidToBuild.createResultantNetAsBoolArray();
 								
 								if(BasicUniqueCheckImproved.isUnique(cuboidToBuild.createResultantNetAsBoolArray()) ){
+									
+									cuboidToBuild.createResultantNetAsBoolArray(true);
+									
 									System.out.println("Unique solution found");
 									System.out.println("Num unique solutions found: " + BasicUniqueCheckImproved.uniqList.size());
+									
+									
 									
 									cuboidToBuild.printCurrentStateOnOtherCuboidsFlatMap();
 									System.out.println("Solution code: " + BasicUniqueCheckImproved.debugLastScore);
 									
+
+									if(Utils.isRotSym(boolArrayAnswer)) {
+										rotSymSolutions++;
+										System.out.println("Found rotationally symmetric net!");
+									}
 								}
 	
 								if(ret > 0) {
@@ -384,6 +450,14 @@ Found 133 unique solution."
 		
 		for(int sideBump=3; sideBump <10; sideBump++) {
 			
+			//TODO: Focus on Rot sym
+			if(indexTrail == 1 
+					//&& Math.abs(sideBump - cuboidToBuild.getLastAdded(0)) > 1
+					&& Math.abs(sideBump - cuboidToBuild.getLastAdded(0)) > 0
+				) {
+				//System.out.println("Latest: " + cuboidToBuild.getLastAdded(0));
+				continue;
+			}
 			//System.out.println("TEST sideBump: " + sideBump);
 			//System.out.println("TEST: " + indexTrail + ": " + cuboidToBuild.currentLayerIndex[indexTrail]);
 			

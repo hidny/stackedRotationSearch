@@ -25,6 +25,9 @@ public class ReallySimpleIntersectFinder5 {
 		//rotationally symmetric solutions found: 98
 		//reallySimpleSearch(5, 1, 1);
 		
+		//rotationally symmetric solutions found: 98
+		reallySimpleSearch(4, 1, 1);
+		
 		//26 solutions: (7 unique solutions)
 		//rotationally symmetric solutions found: 1
 		//reallySimpleSearch(3, 2, 1);
@@ -38,7 +41,7 @@ public class ReallySimpleIntersectFinder5 {
 		//N: 8
 		//404 solutions: (109 unique solutions)
 		//rotationally symmetric solutions found: 16
-		reallySimpleSearch(5, 2, 1);
+		//reallySimpleSearch(5, 2, 1);
 		
 
 		//N: 9
@@ -326,7 +329,13 @@ Found 133 unique solution."
 	
 
 	
-	public static long findReallySimpleSolutionsRecursion(Nx1x1CuboidToFoldAndDrawNet reference, CuboidToFoldOnExtendedFaster5 cuboidToBuild, int layerIndex, int numLayers, boolean debugNope) {
+	public static long findReallySimpleSolutionsRecursion(
+			Nx1x1CuboidToFoldAndDrawNet reference,
+			CuboidToFoldOnExtendedFaster5 cuboidToBuild,
+			int layerIndex,
+			int numLayers,
+			boolean debugNope
+		) {
 
 		long ret = 0;
 		if(debug % DEBUG_MODULO == 0) {
