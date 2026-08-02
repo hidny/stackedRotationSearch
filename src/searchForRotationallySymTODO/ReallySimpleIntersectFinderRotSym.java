@@ -260,8 +260,21 @@ Found 133 unique solution."
 		//TODO: you might have to do the region split logic after all!
 		//rotationally symmetric solutions found: 0
 		//reallySimpleSearch(11, 4, 1);
+
+		//TODO:
+		/*
+		 * 7 x 5 x 2: 118
+11 x 4 x 1: 118
+9 x 5 x 1: 118
+14 x 3 x 1: 118
+19 x 2 x 1: 118
+29 x 1 x 1: 118
+		 */
+		reallySimpleSearch(14, 3, 1);
 		
 		
+		
+		//TODO: check for net covering 3 boxes under here:
 		// N =30:
 		//rotationally symmetric solutions found: 67
 		//reallySimpleSearch(7, 4, 3);
@@ -269,13 +282,14 @@ Found 133 unique solution."
 		//rotationally symmetric solutions found: 10
 		//reallySimpleSearch(11, 3, 2);
 		
+		
+		
 		//Oh crap!
 		//My conjecture is broken!
 		//rotationally symmetric solutions found: 2
-		reallySimpleSearch(5, 5, 5);
+		//reallySimpleSearch(5, 5, 5);
 		
 		
-		//reallySimpleSearch(9, 3, 2);
 		
 		System.out.println("Number of rotationally symmetric solutions found: " + rotSymSolutions);
 	}
